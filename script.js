@@ -1,5 +1,6 @@
 var formTitle = document.querySelector(".form-title");
 let stringUname = "username".split("");
+let btnForm = document.querySelector(".button-form")
 
 displayLetters(stringUname, formTitle);
 
