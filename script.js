@@ -1,10 +1,12 @@
+var mainSection = document.querySelector(".main");
+var gameSection = document.querySelector(".game");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
 var buttonsMode = document.querySelector(".buttons-mode");
 var childBtnsMode = buttonsMode.children;
-var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split(""), "Are you ready".split("")];
 var carouselColor = document.querySelector(".carousel-color");
+var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split(""), "Are you ready".split("")];
 var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
 var inputName = document.querySelector(".input-name");
 var stepForm = -1;
@@ -26,8 +28,6 @@ colors.forEach(color => {
     carouselColor.appendChild(li);
 
 })
-
-
 
 function nextStepForm() {
 
@@ -71,26 +71,22 @@ for (let i = 0; i < childBtnsMode.length; i++) {
 
 }
 
-
 function updateMode(event) {
 
     let currentMode = event.target.textContent;
     Users[currentUser].mode = currentMode;
-    console.log(currentMode);
-    console.log(Users[currentUser].mode);
+
 }
 
 function updateColor(event) {
 
     let currentColor = event.target.style.backgroundColor;
-    console.log(currentColor);
-
     Users[currentUser].color = currentColor;
-    console.log(currentColor);
-    console.log(Users[currentUser].color);
+
 }
 
 btnForm.addEventListener("click", validateForm);
+btnReady.addEventListener("click", validateForm);
 
 function validateForm() {
 
@@ -121,14 +117,14 @@ function validateForm() {
             nextStepForm();
             showStep3Form();
 
-            console.log("next step");
+        }
 
+        case 3: {
+            startGame();
         }
     }
 
-
 }
-
 
 function showStep1Form() {
 
@@ -151,8 +147,16 @@ function showStep3Form() {
     btnForm.classList.add("hidden");
     btnReady.classList.remove("hidden");
 
+}
 
 
+
+function startGame() {
+
+    mainSection.classList.add("hidden");
+    gameSection.classList.remove("hidden")
+
+    // set a counter with 1 2 3 in the screen
 }
 
 /* start form completion */

@@ -23,9 +23,9 @@ body {
     margin: 0 auto;
     min-height: 100vh;
     align-items: center;
-    background: linear-gradient(180deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.3)100%);
-    background: -moz-linear-gradient(180deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.3)100%);
-    background: -webkit-linear-gradient(180deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.3)100%);
+    background: linear-gradient(270deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.6)100%);
+    background: -moz-linear-gradient(270deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.6)100%);
+    background: -webkit-linear-gradient(270deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.6)100%);
 }
 
 .container {
@@ -104,7 +104,6 @@ body {
     cursor: pointer;
     color: var(--color-primary);
     font-size: 1em;
-
 }
 
 .button-start {
@@ -176,11 +175,17 @@ body {
     font-size: 3em;
 }
 
+.game {
+
+    width: 100%;
+    height: 500px;
+    margin: 5% 0;
+}
+
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
-
 
 
 @keyframes transColor {
