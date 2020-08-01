@@ -9,7 +9,7 @@ var carouselColor = document.querySelector(".carousel-color");
 var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split(""), "Are you ready".split("")];
 var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
 var inputName = document.querySelector(".input-name");
-var stepForm = -1;
+var stepForm = 2; // to be set at -1
 var currentUser;
 var Users = {
 
@@ -158,9 +158,6 @@ function detectKey(e) {
 
 function removeKey(e) {
 
-
-    console.log("inside removeKey function")
-
     if (e.keyCode == currentKey) {
         currentKey = undefined;
 
@@ -168,22 +165,59 @@ function removeKey(e) {
     }
 }
 
+// some game constants
+
+const gWidth = 1500;
+const gHeight = 500;
+const boxSize = pixToInt(document.getElementById('myId').style.width);
+const marginGame = 5
+const limitBottom = gHeight - boxSize - marginGame;
+const limitRight = gWidth - boxSize - marginGame;
+
+
 function keyLoop() {
-    var posLeft = document.getElementById('myId').offsetLeft;
-    var posTop = document.getElementById('myId').offsetTop;
-    if (currentKey == '87') {
+    let posLeft = document.getElementById('myId').offsetLeft;
+    let posTop = document.getElementById('myId').offsetTop;
+
+    if (currentKey == '87' && borderTop()) {
         // up arrow
         document.getElementById('myId').style.marginTop = (posTop - 5) + "px";
-    } else if (currentKey == '83') {
+
+    } else if (currentKey == '83' && borderBottom()) {
         // down arrow
         document.getElementById('myId').style.marginTop = (posTop + 5) + "px";
-    } else if (currentKey == '65') {
+    } else if (currentKey == '65' && borderLeft()) {
         // left arrow
         document.getElementById('myId').style.marginLeft = (posLeft - 5) + "px";
-    } else if (currentKey == '68') {
+    } else if (currentKey == '68' && borderRight()) {
         // right arrow
         document.getElementById('myId').style.marginLeft = (posLeft + 5) + "px";
     }
 
     setTimeout(keyLoop, 10);
+}
+
+
+// UTILS //
+
+
+function pixToInt(pixels) {
+    return Number(pixels.slice(0, pixels.length - 2));
+
+}
+
+function borderTop() {
+    return pixToInt(document.getElementById('myId').style.marginTop) > marginGame;
+}
+
+function borderBottom() {
+    return pixToInt(document.getElementById('myId').style.marginTop) < limitBottom;
+}
+
+function borderLeft() {
+    return pixToInt(document.getElementById('myId').style.marginLeft) > marginGame;
+}
+
+function borderRight() {
+    return pixToInt(document.getElementById('myId').style.marginLeft) < limitRight;
 }
