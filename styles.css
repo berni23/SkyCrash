@@ -3,8 +3,6 @@
     --container-bg-color: white;
     --color-primary: lightskyblue;
     --color-primary-dark: rgb(61, 159, 219);
-    ;
-    ;
 }
 
 @font-face {
@@ -29,11 +27,6 @@ body {
     background: -webkit-linear-gradient(-45deg, rgba(26, 188, 156, 1) 0%, rgba(51, 171, 204, 1) 100%);
     */
     background: linear-gradient(180deg, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.3)100%);
-}
-
-
-.hidden {
-    display: none;
 }
 
 .container {
@@ -73,6 +66,7 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
+    padding-bottom: 20px;
     margin: 5% 0;
     justify-content: center;
     align-items: center;
@@ -98,50 +92,74 @@ body {
 .form-title {
     font-size: 4em;
     font-family: 'headerFont';
-    color: rgb(61, 159, 219);
-    /* color: var(--color-primary-dark);*/
-    /* 135, 206, 250*/
+    color: var(--color-primary-dark);
+
 }
 
-.button-start {
+.shadow-btn {
 
-    width: 60px;
-    height: 60px;
     background-color: transparent;
     border: 0px;
     border-radius: 3px;
     margin: 10px 0px;
     cursor: pointer;
     font-weight: bold;
+    color: var(--color-primary);
+    font-size: 1em;
 
+}
+
+.button-start {
+
+    width: 60px;
+    height: 60px;
     transform: translatey(0px);
     animation: float 6s ease-in-out infinite;
+
 
     -webkit-transform: translatey(0px);
     -webkit-animation: float 6s ease-in-out infinite;
 
-
 }
 
-
-
 .fa-chevron-right {
-
-
     transform: translatey(0px);
     animation: transColor 6s ease-in-out infinite
 }
 
-.input-name {
+.buttons-mode {
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+
+.buttons-mode button {
+
+    margin: 0 15px;
+}
+
+.buttons-mode button:hover {
+
+    animation: shadow 6s ease-in-out;
+    -webkit-animation: shadow 6s ease-in-out;
+}
+
+
+.input-name {
 
     border: 0px;
     background: rgba(135, 206, 250, 0.3);
     border-radius: 7px;
 }
 
-@keyframes transColor {
+.hidden {
+    display: none;
+}
 
+@keyframes transColor {
 
     0% {
         color: rgba(135, 206, 250, 1);
@@ -155,32 +173,37 @@ body {
         color: rgba(135, 206, 250, 1);
     }
 
-
-
-
 }
 
 @keyframes float {
     0% {
-        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
-        /* background-color: rgba(135, 206, 250, 0.6);
-        */
         transform: translatey(0px);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+    }
+
+    50% {
+        transform: translatey(-20px);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.2);
+    }
+
+
+    100% {
+        transform: translatey(0px);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+    }
+}
+
+@keyframes shadow {
+
+    0% {
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
     }
 
     50% {
         box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.2);
-        ;
-        /*background-color: rgba(135, 206, 250, 0.2);
-        */
-        transform: translatey(-20px);
     }
 
     100% {
         box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
-        ;
-        /*background-color: rgba(135, 206, 250, 0.6);
-        */
-        transform: translatey(0px);
     }
 }
