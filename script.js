@@ -5,7 +5,6 @@ displayLetters(stringUname, formTitle);
 
 function displayLetters(charArray, element) {
 
-
     var counter = 0;
     var displayedString = "";
     var timer = setInterval(displayLetter, 200);
@@ -15,7 +14,8 @@ function displayLetters(charArray, element) {
 
         displayedString += charArray[counter];
         element.textContent = displayedString;
-        if (counter == charArray.length){
+        counter++;
+        if (counter == charArray.length) {
             clearInterval(timer);
 
         }

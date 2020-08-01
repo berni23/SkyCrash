@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/script.js" defer></script>
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/styles.css" />
@@ -19,24 +20,16 @@
 
         <form class="form-ini">
             <p class="form-title"></p>
-            <!-- <label for="user-name">Username</label>-->
-            <br>
-            <input type="text" autofocus />
+            <input class="input-name" type="text" />
 
-            <br><br><br>
-
-            <label for="mode">Mode</label>
-
-            <br>
-            <select class = "hidden">
+            <select class="hidden">
                 <option value="0">Easy</option>
                 <option value="1">Medium</option>
                 <option value="2">Hard</option>
             </select>
-
-            <button id="button-start">Start</button>
-
         </form>
+        <button type="button" id="button-start"><i class="fa fa-chevron-right" aria-hidden="true"
+                style="font-size:40px;"></i></button>
     </section>
 </body>
 
