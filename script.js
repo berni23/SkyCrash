@@ -5,7 +5,22 @@ var buttonsMode = document.querySelector(".buttons-mode");
 var childBtnsMode = buttonsMode.children;
 
 console.log(childBtnsMode);
-var arrStrings = ["username".split(""), "choose mode".split("")];
+var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split("")];
+var carouselColor = document.querySelector(".carousel-color");
+var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
+
+colors.forEach(color => {
+
+    let li = document.createElement("li");
+    let btnColor = document.createElement("button");
+    btnColor.style.backgroundColor = color;
+    btnColor.style.width = "60px";
+    btnColor.style.height = "60px";
+    li.appendChild(btnColor);
+    carouselColor.appendChild(li);
+
+
+})
 var inputName = document.querySelector(".input-name");
 var stepForm = -1;
 var currentUser;
@@ -15,7 +30,7 @@ var Users = {
 
 function nextStepForm() {
 
-    displayLetters(arrStrings[stepForm + 1], formTitle);
+    displayLetters(arrSteps[stepForm + 1], formTitle);
     stepForm++;
 }
 
@@ -35,6 +50,8 @@ function displayLetters(charArray, element) {
 }
 
 function createUser(newUser) {
+
+    newUser = newUser.trim();
 
     let user = {
         username: newUser,
@@ -75,6 +92,7 @@ function validateForm() {
 
                 createUser(username);
                 showStep1Form();
+                nextStepForm();
 
             }
 
@@ -83,11 +101,21 @@ function validateForm() {
         case 1: {
 
             showStep2Form();
+            nextStepForm();
             break;
+        }
+
+        case 2: {
+
+            // showStep3Form();
+            // nextStepForm();
+
+            console.log("next step");
+
         }
     }
 
-    nextStepForm();
+
 }
 
 
@@ -101,11 +129,14 @@ function showStep1Form() {
 function showStep2Form() {
 
     buttonsMode.classList.add("hidden");
+    carouselColor.classList.remove("hidden");
 
 }
 
+function showStep3Form() {
+
+}
 
 /* start form completion */
-
 
 nextStepForm();

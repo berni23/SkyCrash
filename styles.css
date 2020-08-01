@@ -155,6 +155,21 @@ body {
     border-radius: 7px;
 }
 
+
+
+.carousel-color {
+
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+/* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
