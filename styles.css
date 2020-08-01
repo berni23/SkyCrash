@@ -107,9 +107,6 @@ body {
 }
 
 .button-start {
-
-    /* width: 60px;
-    height: 60px;*/
     padding: 10px;
     transform: translatey(0px);
     animation: float 6s ease-in-out infinite;
@@ -180,6 +177,7 @@ body {
     width: 100%;
     height: 500px;
     margin: 5% 0;
+    position: relative;
 }
 
 /* last class, as it acquires higher priority upon the other display options*/
@@ -187,6 +185,10 @@ body {
     display: none;
 }
 
+#myId {
+
+    position: absolute;
+}
 
 @keyframes transColor {
 
