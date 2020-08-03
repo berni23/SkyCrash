@@ -125,7 +125,6 @@ function showStep2Form() {
     carouselColor.classList.remove("hidden");
 
 }
-"1"
 
 function showStep3Form() {
     carouselColor.classList.add("hidden");
@@ -139,7 +138,6 @@ function startGame() {
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     setTimeout(pushObstacle, arrObs[0][0])
-
     keyLoop();
     // set a counter with 1 2 3 in the screen
 }
@@ -171,36 +169,39 @@ const boxSize = pixToInt(box.style.width);
 const marginGame = 5;
 const limitBottom = gHeight - boxSize - marginGame;
 const limitRight = gWidth - boxSize - marginGame;
+const blueSize = 60; //  size blueBox
+const bH2 = blueSize / 2
+var vBox = 3;
 
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
+
 function keyLoop() {
     let posLeft = box.offsetLeft;
     let posTop = box.offsetTop;
+    let childGame = gameSection.children;
     //let posTop2 = collider.offsetTop;
     if (currentKey == '87' && borderTop(box)) {
-        box.style.marginTop = (posTop - 5) + "px";
+        box.style.marginTop = (posTop - vBox) + "px";
     } else if (currentKey == '83' && borderBottom(box)) {
-        box.style.marginTop = (posTop + 5) + "px";
+        box.style.marginTop = (posTop + vBox) + "px";
     } else if (currentKey == '65' && borderLeft(box)) {
-        box.style.marginLeft = (posLeft - 5) + "px";
+        box.style.marginLeft = (posLeft - vBox) + "px";
     } else if (currentKey == '68' && borderRight(box)) {
-        box.style.marginLeft = (posLeft + 5) + "px";
+        box.style.marginLeft = (posLeft + vBox) + "px";
     }
     //collision(box, collider);
-    for (el of currentObs) {
 
-        if (borderLeft(el)) {
-            el.style.marginLeft = (el.offsetLeft - 5) + "px";
+    for (i = 1; i < childGame.length; i++) {
 
+        if (collision(box, childGame[i]) || !borderLeft(childGame[i])) {
+            childGame[i].remove();
         } else {
-
-            el.remove();
+            childGame[i].style.marginLeft = (childGame[i].offsetLeft - vBox) + "px";
         }
     }
-
-    setTimeout(keyLoop, 10);
+    setTimeout(keyLoop, 7);
 }
 
 /* create obstacles */
@@ -209,7 +210,7 @@ var numObs = 0;
 var arrObs = [
     [3000, "250px"],
     [2000, "250px"],
-    [1, "310px"],
+    [50, "310px"],
 ];
 
 var currentObs = [];
@@ -221,7 +222,6 @@ function pushObstacle() {
     blueBox.style.marginLeft = "1480px";
     blueBox.id = "obstacle" + numObs;
     blueBox.style.marginTop = arrObs[numObs][1];
-
 
     gameSection.appendChild(blueBox);
     currentObs.push(document.getElementById("obstacle" + numObs))
@@ -235,7 +235,6 @@ function pushObstacle() {
 }
 // UTILS //
 
-
 function pixToInt(pixels) {
     return Number(pixels.slice(0, pixels.length - 2));
 }
@@ -245,9 +244,11 @@ function intToPix(integer) {
 }
 
 function position(element) {
-    let h2 = pixToInt(element.style.height) / 2
+    //let h2 = pixToInt(element.style.height) / 2
+    let h2 = 30
+
     //let w2 = pixToInt(element.style.width) / 2
-    return [element.offsetTop + h2, element.offsetLeft + h2, h2]
+    return [element.offsetTop + 30, element.offsetLeft, 30]
 }
 
 function size(element) {
@@ -255,11 +256,10 @@ function size(element) {
 }
 
 function collision(element1, element2) {
-    p1 = position(element1);
-    p2 = position(element2);
-    if (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2])) {
-        console.log("collision!");
-    }
+    let p1 = position(element1);
+    let p2 = position(element2);
+    return (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2]))
+
 }
 
 function borderTop(element) {
