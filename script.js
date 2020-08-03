@@ -23,7 +23,6 @@ colors.forEach(color => {
     btnColor.style.width = "60px";
     btnColor.style.height = "60px";
     btnColor.addEventListener("click", updateColor)
-
     li.appendChild(btnColor);
     carouselColor.appendChild(li);
 
@@ -135,7 +134,6 @@ function startGame() {
     gameSection.classList.remove("hidden")
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
-
     keyLoop();
     // set a counter with 1 2 3 in the screen
 }
@@ -145,7 +143,7 @@ function startGame() {
 nextStepForm();
 
 
-/*experiment with the game*/
+/* game logic implementation*/
 
 var currentKey;
 
@@ -160,28 +158,42 @@ function removeKey(e) {
 
     if (e.keyCode == currentKey) {
         currentKey = undefined;
-
-        console.log("currentKey removed");
     }
 }
 
-// some game constants
+let collider = document.getElementById('collider');
+let box = document.getElementById('myId');
+
+
+// game constraints
 
 const gWidth = 1500;
 const gHeight = 500;
-const boxSize = pixToInt(document.getElementById('myId').style.width);
-const marginGame = 5
+const boxSize = pixToInt(box.style.width);
+console.log("boxSize", boxSize);
+const marginGame = 5;
 const limitBottom = gHeight - boxSize - marginGame;
 const limitRight = gWidth - boxSize - marginGame;
+
+collider.style.marginLeft = "750px";
+collider.style.marginTop = "250px";
+//box.style.marginLeft = "750px";
+//box.style.marginTop = "250px";
 
 
 function keyLoop() {
     let posLeft = document.getElementById('myId').offsetLeft;
     let posTop = document.getElementById('myId').offsetTop;
+    let posLeft2 = document.getElementById('collider').offsetLeft;
+    let posTop2 = document.getElementById('collider').offsetTop;
 
     if (currentKey == '87' && borderTop()) {
         // up arrow
         document.getElementById('myId').style.marginTop = (posTop - 5) + "px";
+        console.log("red", posLeft, posTop);
+        console.log("blue", posLeft2, posTop2);
+
+        collision(document.getElementById('myId'), document.getElementById('collider'))
 
     } else if (currentKey == '83' && borderBottom()) {
         // down arrow
@@ -197,13 +209,36 @@ function keyLoop() {
     setTimeout(keyLoop, 10);
 }
 
-
 // UTILS //
-
 
 function pixToInt(pixels) {
     return Number(pixels.slice(0, pixels.length - 2));
 
+}
+
+function position(element) {
+
+    let h2 = pixToInt(element.style.height) / 2
+    //let w2 = pixToInt(element.style.width) / 2
+    return [element.offsetTop + h2, element.offsetLeft + h2, h2]
+
+}
+
+function size(element) {
+
+    return [pixToInt(element.style.height), pixToInt(element.style.width)]
+}
+
+function collision(element1, element2) {
+
+    p1 = position(element1);
+    p2 = position(element2);
+
+    if (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2])) {
+
+        console.log("collision!");
+
+    }
 }
 
 function borderTop() {
@@ -221,3 +256,12 @@ function borderLeft() {
 function borderRight() {
     return pixToInt(document.getElementById('myId').style.marginLeft) < limitRight;
 }
+
+
+/* let posLeft = document.getElementById('myId').style.offsetLeft;
+ let posTop = document.getElementById('myId').style.offsetTop;
+
+ let mLeft = document.getElementById('myId').style.marginLeft;
+ let mTop = document.getElementById('myId').style.marginTop;
+
+ */

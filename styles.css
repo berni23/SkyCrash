@@ -172,6 +172,8 @@ body {
     font-size: 3em;
 }
 
+/* game styles*/
+
 .game {
 
     width: 100%;
@@ -180,15 +182,20 @@ body {
     position: relative;
 }
 
+.box {
+    position: absolute;
+}
+
+
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
 
-#myId {
 
-    position: absolute;
-}
+
+
+
 
 @keyframes transColor {
 
