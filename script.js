@@ -137,11 +137,9 @@ function validateForm() {
     }
 }
 
-let cBack = "3210".split("");
+let cBack = ["3", "2", "1", "0", "GO!", ""];
 
 function counterBack(element) {
-
-
     let counter = 0;
     let timer = setInterval(displayNum, 800);
 
@@ -155,11 +153,6 @@ function counterBack(element) {
         }
     }
 }
-
-
-
-
-
 
 function showStep1Form() {
     inputName.classList.add("hidden");
@@ -179,22 +172,18 @@ function showStep3Form() {
 }
 
 function startGame() {
-
     gameSection.classList.remove("hidden");
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     setTimeout(pushObstacle, arrObs[0][0])
     let intHrames = setInterval(hFrames, 500);
     let intCframes = setInterval(cFrames, 200);
-
     keyLoop();
     // set a counter with 1 2 3 in the screen
 }
-
 /* start form completion */
 nextStepForm();
 /* game logic implementation*/
-
 
 
 function detectKey(e) {
@@ -267,6 +256,7 @@ function keyLoop() {
 
 var numObs = 0;
 var arrObs = [
+    [1000, "100px", "diamond"],
     [3000, "250px", "blue-box"],
     [2000, "250px", "blue-box"],
     [50, "310px", "blue-box"],
@@ -278,12 +268,19 @@ var arrObs = [
     [500, "50px", "coin"],
     [500, "50px", "coin"],
     [500, "50px", "coin"],
+
 ];
 
 
 
-function pushObstacle() {
+// add a given number of coins
 
+function addCoins(numCoins, interval, position) {
+    for (let i = 0; i < numCoins; i++) {}
+}
+
+
+function pushObstacle() {
     let newObs = document.createElement('div');
     newObs.classList.add(arrObs[numObs][2]);
     newObs.style.marginLeft = "1480px";
@@ -308,9 +305,7 @@ function intToPix(integer) {
 
 function position(element) {
     //let h2 = pixToInt(element.style.height) / 2
-
     //let w2 = pixToInt(element.style.width) / 2
-
     // size halfs hard coded
     return [element.offsetTop + 30, element.offsetLeft, 30]
 }
@@ -323,7 +318,6 @@ function collision(element1, element2) {
     let p1 = position(element1);
     let p2 = position(element2);
     return (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2]))
-
 }
 
 function borderTop(element) {
@@ -342,29 +336,38 @@ function borderRight(element) {
     return pixToInt(element.style.marginLeft) < limitRight;
 }
 
+// frames for powerUps (coins, lives , diamonds)
+
 let hFrame = 0;
 let cFrame = 0;
+let dFrame = 0;
 
 function hFrames() {
-
-    hFrame = hFrame % 4;
     heartImg.forEach(h => {
         h.style.backgroundImage = `url('assets/images/heart${hFrame}.png')`
     })
-    hFrame++;
+    hFrame = (hFrame + 1) % 4;
 }
 
 function cFrames() {
-
-    cFrame = cFrame % 8;
     let coinImg = document.querySelectorAll(".coin");
     coinImg.forEach(c => {
         c.style.backgroundImage = `url('assets/images/coin_${cFrame}.png')`;
     })
 
-    cFrame++;
+    cFrame = (cFrame + 1) % 8;
+    dFrames(); // both executed simulaneously , so we don't call an extra timer;
+
 }
 
+function dFrames() {
+
+    let diamondImg = document.querySelectorAll(".diamond");
+    diamondImg.forEach(d => {
+        d.style.backgroundImage = `url('assets/images/diamond${dFrame}.png')`;
+    })
+    dFrame = (dFrame + 1) % 4
+}
 
 /* let posLeft = document.getElementById('myId').style.offsetLeft;
 let posTop = document.getElementById('myId').style.offsetTop;

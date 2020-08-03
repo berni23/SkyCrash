@@ -18,7 +18,7 @@
 body {
     text-align: center;
     padding: 0em;
-    font-family: "Work Sans", sans-serif;
+    font-family: 'headerFont';
     max-width: 1500px;
     margin: 0 auto;
     min-height: 100vh;
@@ -51,7 +51,6 @@ body {
 .title {
 
     font-size: 5em;
-    font-family: 'headerFont';
     margin-top: 50px;
     display: inline-block;
     width: 100%;
@@ -86,12 +85,10 @@ body {
 .form-ini input:focus {
 
     outline: none;
-
 }
 
 .form-title {
     font-size: 4em;
-    font-family: 'headerFont';
     color: var(--color-primary-dark);
 
 }
@@ -138,6 +135,7 @@ body {
 
     margin: 0 15px;
     font-weight: bold;
+    outline: none;
 }
 
 .buttons-mode button:hover {
@@ -167,8 +165,6 @@ body {
 }
 
 #button-ready {
-
-    font-family: "headerFont";
     font-weight: normal;
     font-size: 3em;
 }
@@ -217,6 +213,9 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
+    color: var(--color-primary-dark);
+
+    font-size: 25px;
 }
 
 
@@ -234,20 +233,27 @@ body {
     background-image: url("assets/images/coin_0.png");
     width: 32px;
     height: 32px;
-
-
 }
 
+.diamond {
+
+    position: absolute;
+    background-image: url("assets/images/diamond0.png");
+    background-repeat: no-repeat;
+    transform: scale(1.5);
+    width: 50px;
+    height: 50px;
+}
 
 #cuenta-atras {
-
-    font-family: 'headerFont';
-    font-size: 7em;
+    font-size: 200px;
     position: absolute;
-    margin-top: 200px;
+    margin-top: 300px;
     margin-left: 750px;
     color: var(--color-primary-dark);
 }
+
+
 
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
@@ -275,7 +281,7 @@ body {
 @keyframes float {
     0% {
         transform: translatey(0px);
-        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
     }
 
     50% {
@@ -286,14 +292,14 @@ body {
 
     100% {
         transform: translatey(0px);
-        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
     }
 }
 
 @keyframes shadow {
 
     0% {
-        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
     }
 
     50% {
@@ -301,6 +307,6 @@ body {
     }
 
     100% {
-        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.8);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
     }
 }
