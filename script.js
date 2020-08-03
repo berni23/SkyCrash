@@ -12,10 +12,20 @@ var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
 var heartImg = document.querySelectorAll(".heart");
-var coinImg = document.querySelectorAll(".coin");
+var cuentaAtras = document.querySelector("#cuenta-atras");
 var stepForm = -1; // to be set at -1
-var currentUser;
 var gameTimer;
+//coins audio
+var coinSound = document.getElementById('sound-coin');
+var soundClick = document.getElementById('sound-click');
+var soundStart = document.getElementById('sound-start');
+// vars related to the current match being played, vars set to "easy" mode by default;
+var currentUser;
+var currentScore;
+var currentLife = 3;
+var currentKey;
+var currentMode;
+var currentCoins;
 var Users = {
 
 }
@@ -71,8 +81,8 @@ for (let i = 0; i < childBtnsMode.length; i++) {
 }
 
 function updateMode(event) {
-    let currentMode = event.target.textContent;
-    Users[currentUser].mode = currentMode;
+    currentMode = event.target.textContent;
+
 }
 
 function updateColor(event) {
@@ -92,32 +102,64 @@ function validateForm() {
                 createUser(username);
                 showStep1Form();
                 nextStepForm();
+                soundClick.play();
+                soundClick.currentTime = 0;
             }
             break;
         }
-        case 1: { //choose color
+        case 1: { //mode
 
+            Users[currentUser].mode = currentMode;
             showStep2Form();
             nextStepForm();
+            soundClick.play();
+            soundClick.currentTime = 0;
 
             break;
         }
-        case 2: { // are u ready?
+        case 2: { // choose color
 
             nextStepForm();
             showStep3Form();
             box.style.backgroundColor = Users[currentUser].color;
-            console.log(box.style.backgroundColor);
-            console.log("are u ready?")
+            soundClick.play();
+            soundClick.currentTime = 0;
             break;
         }
 
         case 3: { // start game
-            startGame();
+            //startGame();
+            soundStart.play();
+            counterBack(cuentaAtras);
+            mainSection.classList.add("hidden");
             break;
         }
     }
 }
+
+let cBack = "3210".split("");
+
+function counterBack(element) {
+
+
+    let counter = 0;
+    let timer = setInterval(displayNum, 800);
+
+    function displayNum() {
+        let num = cBack[counter];
+        element.textContent = num;
+        counter++;
+        if (counter == cBack.length) {
+            element.textContent = "";
+            clearInterval(timer);
+        }
+    }
+}
+
+
+
+
+
 
 function showStep1Form() {
     inputName.classList.add("hidden");
@@ -137,15 +179,15 @@ function showStep3Form() {
 }
 
 function startGame() {
-    mainSection.classList.add("hidden");
-    gameSection.classList.remove("hidden")
+
+    gameSection.classList.remove("hidden");
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     setTimeout(pushObstacle, arrObs[0][0])
-    gameTimer = new Date();
-    keyLoop();
     let intHrames = setInterval(hFrames, 500);
     let intCframes = setInterval(cFrames, 200);
+
+    keyLoop();
     // set a counter with 1 2 3 in the screen
 }
 
@@ -153,11 +195,11 @@ function startGame() {
 nextStepForm();
 /* game logic implementation*/
 
-var currentKey;
+
 
 function detectKey(e) {
     if (e.keyCode == '87' || e.keyCode == '83' || e.keyCode == '65' || e.keyCode == '68') {
-        currentKey = e.keyCode
+        currentKey = e.keyCode;
     }
 }
 
@@ -183,14 +225,11 @@ var vBox = 3;
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
-
-
-
 function keyLoop() {
     let posLeft = box.offsetLeft;
     let posTop = box.offsetTop;
-    let childGame = gameContainer.querySelectorAll(".blue-box");
-    //let posTop2 = collider.offsetTop;
+    let childGame = gameContainer.children;
+
     if (currentKey == '87' && borderTop(box)) {
         box.style.marginTop = (posTop - vBox) + "px";
     } else if (currentKey == '83' && borderBottom(box)) {
@@ -202,44 +241,61 @@ function keyLoop() {
     }
     //collision(box, collider);
 
-    for (i = 0; i < childGame.length; i++) {
+    for (i = 1; i < childGame.length; i++) {
 
-        if (collision(box, childGame[i]) || !borderLeft(childGame[i])) {
+        if (collision(box, childGame[i])) {
+            if (childGame[i].classList.contains("coin")) {
+                currentCoins++;
+                coinSound.play();
+                coinSound.currentTime = 0
+                console.log('coin-collision');
+            } else {
+                currentLife--;
+            }
             childGame[i].remove();
+        } else if (!borderLeft(childGame[i])) {
+            childGame[i].remove()
         } else {
             childGame[i].style.marginLeft = (childGame[i].offsetLeft - vBox) + "px";
         }
     }
-    setTimeout(keyLoop, 7);
+    setTimeout(keyLoop, 8);
 }
+
 
 /* create obstacles */
 
 var numObs = 0;
 var arrObs = [
-    [3000, "250px"],
-    [2000, "250px"],
-    [50, "310px"],
+    [3000, "250px", "blue-box"],
+    [2000, "250px", "blue-box"],
+    [50, "310px", "blue-box"],
+    [50, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
+    [500, "50px", "coin"],
 ];
 
-var currentObs = [];
+
 
 function pushObstacle() {
 
-    let blueBox = document.createElement('div');
-    blueBox.classList.add("blue-box");
-    blueBox.style.marginLeft = "1480px";
-    blueBox.id = "obstacle" + numObs;
-    blueBox.style.marginTop = arrObs[numObs][1];
-
-    gameContainer.appendChild(blueBox);
-    currentObs.push(document.getElementById("obstacle" + numObs))
+    let newObs = document.createElement('div');
+    newObs.classList.add(arrObs[numObs][2]);
+    newObs.style.marginLeft = "1480px";
+    newObs.id = "obstacle" + numObs;
+    newObs.style.marginTop = arrObs[numObs][1];
+    gameContainer.appendChild(newObs);
     numObs++;
-
     if (numObs < arrObs.length) {
         setTimeout(pushObstacle, arrObs[numObs][0]);
     }
 }
+
 // UTILS //
 
 function pixToInt(pixels) {
@@ -300,11 +356,8 @@ function hFrames() {
 
 function cFrames() {
 
-
     cFrame = cFrame % 8;
-
-    console.log(cFrame);
-
+    let coinImg = document.querySelectorAll(".coin");
     coinImg.forEach(c => {
         c.style.backgroundImage = `url('assets/images/coin_${cFrame}.png')`;
     })

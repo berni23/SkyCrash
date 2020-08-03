@@ -37,8 +37,13 @@
         <button type="button" id="button-form" class="button-start shadow-btn"><i class="fa fa-chevron-right"
                 aria-hidden="true" style="font-size:40px;"></i></button>
         <button type="button" id="button-ready" class="button-start shadow-btn hidden">Start</button>
+        <audio id="sound-click" src="assets/sounds/accept2.mp3"></audio>
+        <audio id="sound-start" src="assets/sounds/start.mp3" onended="startGame()"></audio>
     </section>
+
+    <p id="cuenta-atras"> </p>
     <section class="game-wrapper hidden">
+        <audio id="sound-coin" src="assets/sounds/sound_coin.mp3"></audio>
         <div class="game-status container">
             <h3>Status</h3>
             <div class="lives-status">
@@ -50,7 +55,6 @@
         </div>
         <div class="game container">
             <div id="myId" class="box" style=" z-index: 10; width:60px; height:60px"></div>
-            <div class="coin" style=" width:32px; height:32px; margin-top:250px;margin-right:750px"></div>
         </div>
     </section>
 </body>
@@ -59,3 +63,4 @@
 
 
 <!--<div id="collider" class="box" style="background-color:blue; width:60px; height:60px">-->
+<!--<div class="coin" style=" width:32px; height:32px; margin-top:250px;margin-right:750px"></div>-->
