@@ -30,22 +30,32 @@
                 <button type="button" class="shadow-btn">
                     HARD
                 </button>
-
             </div>
             <ul class="carousel-color hidden">
             </ul>
         </div>
         <button type="button" id="button-form" class="button-start shadow-btn"><i class="fa fa-chevron-right"
                 aria-hidden="true" style="font-size:40px;"></i></button>
-
         <button type="button" id="button-ready" class="button-start shadow-btn hidden">Start</button>
     </section>
-
-    <section class="game container hidden">
-        <div id="myId" class="box" style=" z-index: 10; width:60px; height:60px"></div>
-        <!--<div id="collider" class="box" style="background-color:blue; width:60px; height:60px">-->
+    <section class="game-wrapper hidden">
+        <div class="game-status container">
+            <h3>Status</h3>
+            <div class="lives-status">
+                <ul>
+                    <li class="heart"></li>
+                    <li class="heart"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="game container">
+            <div id="myId" class="box" style=" z-index: 10; width:60px; height:60px"></div>
+            <div class="coin" style=" width:32px; height:32px; margin-top:250px;margin-right:750px"></div>
         </div>
     </section>
 </body>
 
 </html>
+
+
+<!--<div id="collider" class="box" style="background-color:blue; width:60px; height:60px">-->

@@ -1,5 +1,6 @@
 var mainSection = document.querySelector(".main");
-var gameSection = document.querySelector(".game");
+var gameContainer = document.querySelector(".game");
+var gameSection = document.querySelector(".game-wrapper");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
@@ -10,8 +11,11 @@ var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".sp
 var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
+var heartImg = document.querySelectorAll(".heart");
+var coinImg = document.querySelectorAll(".coin");
 var stepForm = -1; // to be set at -1
 var currentUser;
+var gameTimer;
 var Users = {
 
 }
@@ -54,7 +58,7 @@ function createUser(newUser) {
     let user = {
         username: newUser,
         mode: "EASY",
-        color: "red",
+        color: colors[0],
         time: undefined,
         score: 0
     }
@@ -138,7 +142,10 @@ function startGame() {
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     setTimeout(pushObstacle, arrObs[0][0])
+    gameTimer = new Date();
     keyLoop();
+    let intHrames = setInterval(hFrames, 500);
+    let intCframes = setInterval(cFrames, 200);
     // set a counter with 1 2 3 in the screen
 }
 
@@ -177,10 +184,12 @@ box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
 
+
+
 function keyLoop() {
     let posLeft = box.offsetLeft;
     let posTop = box.offsetTop;
-    let childGame = gameSection.children;
+    let childGame = gameContainer.querySelectorAll(".blue-box");
     //let posTop2 = collider.offsetTop;
     if (currentKey == '87' && borderTop(box)) {
         box.style.marginTop = (posTop - vBox) + "px";
@@ -193,7 +202,7 @@ function keyLoop() {
     }
     //collision(box, collider);
 
-    for (i = 1; i < childGame.length; i++) {
+    for (i = 0; i < childGame.length; i++) {
 
         if (collision(box, childGame[i]) || !borderLeft(childGame[i])) {
             childGame[i].remove();
@@ -223,13 +232,11 @@ function pushObstacle() {
     blueBox.id = "obstacle" + numObs;
     blueBox.style.marginTop = arrObs[numObs][1];
 
-    gameSection.appendChild(blueBox);
+    gameContainer.appendChild(blueBox);
     currentObs.push(document.getElementById("obstacle" + numObs))
     numObs++;
 
     if (numObs < arrObs.length) {
-        console.log(numObs);
-        console.log(arrObs[numObs][0]);
         setTimeout(pushObstacle, arrObs[numObs][0]);
     }
 }
@@ -245,9 +252,10 @@ function intToPix(integer) {
 
 function position(element) {
     //let h2 = pixToInt(element.style.height) / 2
-    let h2 = 30
 
     //let w2 = pixToInt(element.style.width) / 2
+
+    // size halfs hard coded
     return [element.offsetTop + 30, element.offsetLeft, 30]
 }
 
@@ -278,11 +286,35 @@ function borderRight(element) {
     return pixToInt(element.style.marginLeft) < limitRight;
 }
 
+let hFrame = 0;
+let cFrame = 0;
+
+function hFrames() {
+
+    hFrame = hFrame % 4;
+    heartImg.forEach(h => {
+        h.style.backgroundImage = `url('assets/images/heart${hFrame}.png')`
+    })
+    hFrame++;
+}
+
+function cFrames() {
+
+
+    cFrame = cFrame % 8;
+
+    console.log(cFrame);
+
+    coinImg.forEach(c => {
+        c.style.backgroundImage = `url('assets/images/coin_${cFrame}.png')`;
+    })
+
+    cFrame++;
+}
+
 
 /* let posLeft = document.getElementById('myId').style.offsetLeft;
- let posTop = document.getElementById('myId').style.offsetTop;
-
- let mLeft = document.getElementById('myId').style.marginLeft;
- let mTop = document.getElementById('myId').style.marginTop;
-
+let posTop = document.getElementById('myId').style.offsetTop;
+let mLeft = document.getElementById('myId').style.marginLeft;
+let mTop = document.getElementById('myId').style.marginTop;
  */

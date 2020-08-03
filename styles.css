@@ -33,6 +33,7 @@ body {
     background-color: var(--container-bg-color);
     border-radius: 15px;
     box-shadow: 0 0 10px var(--color-primary);
+    color: var(--color-primary-dark);
 }
 
 .main-header {
@@ -196,10 +197,50 @@ body {
     height: 60px;
 }
 
+.game-wrapper {
+
+    position: relative;
+}
+
+.game-status {
+
+    margin: 20px;
+    padding: 10px;
+    width: fit-content;
+
+}
+
+
+.lives-status ul {
+
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+
+.heart {
+
+    background-image: url("assets/images/heart0.png");
+    width: 30px;
+    height: 30px;
+
+}
+
+.coin {
+
+    position: absolute;
+    background-image: url("assets/images/coin_0.png");
+
+
+}
+
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
+
 
 
 
