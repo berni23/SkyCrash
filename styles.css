@@ -184,16 +184,22 @@ body {
 
 .box {
     position: absolute;
+    width: 60px;
+    height: 60px;
 }
 
+.blue-box {
+
+    position: absolute;
+    background-color: blue;
+    width: 60px;
+    height: 60px;
+}
 
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
-
-
-
 
 
 
