@@ -9,7 +9,8 @@ var carouselColor = document.querySelector(".carousel-color");
 var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split(""), "Are you ready".split("")];
 var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
 var inputName = document.querySelector(".input-name");
-var stepForm = 2; // to be set at -1
+var box = document.getElementById("myId");
+var stepForm = -1; // to be set at -1
 var currentUser;
 var Users = {
 
@@ -94,12 +95,15 @@ function validateForm() {
 
             showStep2Form();
             nextStepForm();
+
             break;
         }
         case 2: { // are u ready?
 
             nextStepForm();
             showStep3Form();
+            box.style.backgroundColor = Users[currentUser].color;
+            console.log(box.style.backgroundColor);
             console.log("are u ready?")
             break;
         }
@@ -159,7 +163,6 @@ function removeKey(e) {
 }
 
 //let collider = document.getElementById('collider');
-let box = document.getElementById("myId");
 console.log(box);
 // game constraints
 const gWidth = 1500;
@@ -206,7 +209,7 @@ var numObs = 0;
 var arrObs = [
     [3000, "250px"],
     [2000, "250px"],
-    [1000, "310px"]
+    [1, "310px"],
 ];
 
 var currentObs = [];
@@ -215,12 +218,6 @@ function pushObstacle() {
 
     let blueBox = document.createElement('div');
     blueBox.classList.add("blue-box");
-    /*blueBox.style.backgroundColor = "blue";
-    blueBox.classList.add("box");
-    blueBox.style.width = "60px";
-    blueBox.style.height = "60px";
-    blueBox.style.marginLeft = "1480px";
-    */
     blueBox.style.marginLeft = "1480px";
     blueBox.id = "obstacle" + numObs;
     blueBox.style.marginTop = arrObs[numObs][1];
