@@ -11,7 +11,7 @@ var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".sp
 var colors = ["rgba(191, 85, 236, 0.8)", "rgba(0,128,0, 0.8)", "rgba(255, 0, 0, 0.8)"]
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
-
+var livesStatus = document.querySelector(".lives");
 var cuentaAtras = document.querySelector("#cuenta-atras");
 var stepForm = -1; // to be set at -1
 var gameTimer;
@@ -37,7 +37,6 @@ var bSize = 50;
 var Users = {
 
 }
-
 
 colors.forEach(color => {
 
@@ -116,11 +115,10 @@ function updateLife() {
 
     for (i = 0; i < currentLife; i++) {
 
-        var heart = createElement('li');
+        var heart = document.createElement('li');
         heart.classList.add("heart");
-        heartImg.appendChild(heart);
+        livesStatus.appendChild(heart);
     }
-
 
 }
 
@@ -145,6 +143,7 @@ function validateForm() {
             Users[currentUser].mode = currentMode;
             showStep2Form();
             nextStepForm();
+            updateLife();
             soundClick.play();
             soundClick.currentTime = 0;
 
@@ -244,13 +243,13 @@ function removeKey(e) {
 }
 
 // game constraints
-const gWidth = 1500;
-const gHeight = 500;
-const boxSize = pixToInt(box.style.width);
-const marginGame = 5;
-const limitBottom = gHeight - boxSize - marginGame;
-const limitRight = gWidth - boxSize - marginGame;
-const bH2 = boxSize / 2
+var gWidth = 1500;
+var gHeight = 500;
+var boxSize = pixToInt(box.style.width);
+var marginGame = 5;
+var limitBottom = gHeight - boxSize - marginGame;
+var limitRight = gWidth - boxSize - marginGame;
+var bH2 = boxSize / 2
 var vBox = 4;
 const gameInt = 10 // gameInterval
 box.style.marginLeft = "750px";
@@ -363,7 +362,6 @@ function addObject(num, interval, position, type = "coin") {
 
 }
 
-
 function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "normal") {
 
     if (holeNum == 'undefined') {
@@ -408,7 +406,7 @@ function mixedWall(type1, type2, tInt = 50) {
 
 function snakeWall(num, holes, tInt = 50, holeBoolean) {
 
-    if (holeBoolean == "undefined") {
+    if (holeBoolean == undefined) {
         holeBoolean = populateArray(num, true);
     }
 
@@ -421,10 +419,9 @@ function snakeWall(num, holes, tInt = 50, holeBoolean) {
     }
 }
 
-
 function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean) {
 
-    if (holeBoolean == "undefined") {
+    if (holeBoolean == undefined) {
         holeBoolean = populateArray(12, true);
     }
 
@@ -457,7 +454,7 @@ function getRandomInt(max) {
 
 function populateArray(l, item) {
 
-    var array;
+    var array = [];
     for (i = 0; i < l; i++) {
         array.push(item);
     }
@@ -526,13 +523,14 @@ function borderRight(element) {
 }
 
 // frames  powerUps (coins, lives , diamonds)
+
 var hFrame = 0;
 var cFrame = 0;
 var dFrame = 0;
 
 function hFrames() {
     var heartImg = document.querySelectorAll(".heart");
-    heartImg.Each(h => {
+    heartImg.forEach(h => {
         h.style.backgroundImage = `url('assets/images/heart${hFrame}.png')`
     })
     hFrame = (hFrame + 1) % 4;
