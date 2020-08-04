@@ -29,7 +29,6 @@ body {
 }
 
 .container {
-
     background-color: var(--container-bg-color);
     border-radius: 15px;
     box-shadow: 0 0 10px var(--color-primary);
@@ -37,7 +36,6 @@ body {
 }
 
 .main-header {
-
     position: relative;
     width: 100%;
     height: 200px;
@@ -70,7 +68,6 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-
 }
 
 .form-ini {
@@ -145,11 +142,9 @@ body {
     -webkit-animation: shadow 6s ease-in-out;
 }
 
-
 .mode-selected {
 
     box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
-
 }
 
 .input-name {
@@ -158,7 +153,6 @@ body {
     background: rgba(135, 206, 250, 0.3);
     border-radius: 7px;
 }
-
 
 .carousel-color {
 
@@ -188,61 +182,49 @@ body {
 
 .box {
     position: absolute;
-    width: 60px;
-    height: 60px;
 }
 
 .blue-box {
 
     position: absolute;
     background-color: blue;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 .same-box {
-
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 .game-wrapper {
-
     position: relative;
 }
 
 .game-status {
-
     margin: 20px;
     padding: 10px;
     width: fit-content;
 
 }
 
-
 .lives-status ul {
-
     list-style-type: none;
     display: flex;
     margin: 0;
     padding: 0;
     color: var(--color-primary-dark);
-
     font-size: 25px;
 }
 
-
 .heart {
-
     background-image: url("assets/images/heart0.png");
     width: 30px;
     height: 30px;
-
 }
 
 .coin {
-
     position: absolute;
     background-image: url("assets/images/coin_0.png");
     width: 32px;
@@ -250,7 +232,6 @@ body {
 }
 
 .diamond {
-
     position: absolute;
     background-image: url("assets/images/diamond0.png");
     background-repeat: no-repeat;
@@ -267,21 +248,15 @@ body {
     color: var(--color-primary-dark);
 }
 
-
 .power-up {
-
     animation: glowing 3s ease-in-out infinite;
     -webkit-animation: glowing 3s ease-in-out infinite;
-
 }
-
 
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
     display: none;
 }
-
-
 
 @keyframes glowing {
 
@@ -327,7 +302,6 @@ body {
         transform: translatey(-20px);
         box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.2);
     }
-
 
     100% {
         transform: translatey(0px);

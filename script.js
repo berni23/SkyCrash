@@ -105,7 +105,6 @@ function validateForm() {
         case 0: { // username
             let username = inputName.value;
             if (username != "") {
-
                 createUser(username);
                 showStep1Form();
                 nextStepForm();
@@ -143,7 +142,6 @@ function validateForm() {
         }
     }
 }
-
 let cBack = ["3", "2", "1", "0", "GO!", ""];
 
 function counterBack(element) {
@@ -178,18 +176,32 @@ function showStep3Form() {
     btnReady.classList.remove("hidden");
 }
 
+let intHrames;
+let intCframes;
+let gameLoop;
+
 function startGame() {
     gameSection.classList.remove("hidden");
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
+    initializeLoops();
     setTimeout(pushObstacle, arrObs[0][0])
+
+}
+
+function initializeLoops() {
+
     let intHrames = setInterval(hFrames, 500);
     let intCframes = setInterval(cFrames, 200);
-    let gameLoop = setInterval(keyLoop, 8);
-    // set a counter with 1 2 3 in the screen
+    let gameLoop = setInterval(keyLoop, gameInt);
+
 }
 /* start form completion */
 nextStepForm();
+
+var numObs = 0;
+var arrObs = [];
+includeObjects();
 /* game logic implementation*/
 
 
@@ -205,8 +217,6 @@ function removeKey(e) {
     }
 }
 
-//let collider = document.getElementById('collider');
-console.log(box);
 // game constraints
 const gWidth = 1500;
 const gHeight = 500;
@@ -214,10 +224,9 @@ const boxSize = pixToInt(box.style.width);
 const marginGame = 5;
 const limitBottom = gHeight - boxSize - marginGame;
 const limitRight = gWidth - boxSize - marginGame;
-const blueSize = 60; //  size blueBox
-const bH2 = blueSize / 2
-var vBox = 3;
-
+const bH2 = boxSize / 2
+var vBox = 4;
+const gameInt = 10 // gameInterval
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
@@ -252,7 +261,7 @@ function keyLoop() {
                 numCoins.textContent = (Number(numCoins.textContent) + 5).toString();
                 coinSound.play();
                 coinSound.currentTime = 0;
-            } else {
+            } else if (childGame[i].classList.contains("same-box")) {
 
                 box.classList.add("power-up");
                 power = true;
@@ -268,37 +277,39 @@ function keyLoop() {
         }
     }
 }
-
 /* create obstacles */
 
-var numObs = 0;
-var arrObs = [
-    [1000, "100px", "diamond"],
-    [3000, "250px", "blue-box"],
-    [2000, "250px", "blue-box"],
-    [50, "310px", "blue-box"],
-    [50, "200px", "same-box"],
-    [500, "300px", "same-box"],
-    [500, "200px", "same-box"],
-    [500, "300px", "same-box"],
-    [50, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
-    [500, "50px", "coin"],
+function includeObjects() {
 
-];
+    addObject(10, 300, "250px"); // if object not specified, it is a coin
+    obstacleWall(hole = false);
+    addObject(1, 5000, "250px");
+    addObject(1, 600, "250px", "blue-box")
+    obstacleWall(true, 2);
+    obstacleWall(false, 2);
+    addObject(1, 2000, "400px", "coin");
+    obstacleWall(true, 2, timeInt = 100, send = "reversed");
+    addObject(1, 2000, "80px");
+    obstacleWall(true, 3, timeInt = 100);
+    snakeWall(12, [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], tInt = 150);
+    addObject(1, 300, "250px", "diamond");
+    randObject(4, 300, "blue-box");
+    randObject(100, 50);
+    addObject(1, 500, "250px");
+    addObject(1, 50, "100px", "same-box");
+    addObject(1, 50, "200px", "blue-box");
+    addObject(1, 50, "300px", "same-box");
+    addObject(1, 50, "400px", "blue-box");
+    addObject(1, 50, "500px", "same-box");
 
-// add a given number of coins
 
-function addCoins(numCoins, interval, position) {
-    for (let i = 0; i < numCoins; i++) {}
+    randObject(40, 200, "blue-box");
+
+
 }
 
 function pushObstacle() {
+
     let newObs = document.createElement('div');
     if (arrObs[numObs][2] == "same-box") {
         newObs.style.backgroundColor = currentColor;
@@ -307,21 +318,88 @@ function pushObstacle() {
     newObs.style.marginLeft = "1480px";
     newObs.id = "obstacle" + numObs;
     newObs.style.marginTop = arrObs[numObs][1];
-
     gameContainer.appendChild(newObs);
     numObs++;
+
     if (numObs < arrObs.length) {
         setTimeout(pushObstacle, arrObs[numObs][0]);
     }
 }
 
+// add a given number of coins
+function addObject(num, interval, position, type = "coin") {
+    for (let i = 0; i < num; i++) {
+        arrObs.push([interval, position, type])
+    }
+
+}
+
+function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "normal") {
+
+    let numBoxes = 6; //array wise! ( real number minus 1)
+    let margin = 15;
+    let bSize = 50;
+    if (holeNum == 'undefined') {
+        holeNum = Math.floor(numBoxes / 2)
+    }
+    for (let i = 0; i <= numBoxes; i++) {
+        if (i == holeNum) {
+            if (!hole) {
+                arrObs.push([timeInt, setPosition(i), "same-box"])
+            } else {
+                arrObs.push([timeInt, setPosition(i), "coin"])
+            }
+        } else {
+            arrObs.push([timeInt, setPosition(i), "blue-box"])
+        }
+    }
+
+    function setPosition(i) {
+        if (send == "reversed") {
+            return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * margin)
+        } else {
+            return intToPix(i * bSize + (i + 1) * margin);
+        }
+    }
+}
+
+function snakeWall(num, holes, tInt = 50) {
+
+    for (let i = 0; i < num; i++) {
+        if (i % 2 == 0) {
+            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "normal");
+        } else {
+            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "reversed");
+        }
+    }
+}
+
+function randObject(num, tInt, type = "coin") {
+
+    for (let i = 0; i < num; i++) {
+        arrObs.push([tInt, randPos(), type])
+    }
+}
+
+function wait(time) {
+    arrObs.push([time, "50px", "time"]);
+}
+
+function randPos() {
+    return intToPix(getRandomInt(430));
+
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 // UTILS //
 
 var power = false;
 
 function pUpFinished() {
 
-    box.classList.remove(".power-up");
+    box.classList.remove("power-up");
     power = false;
 }
 
@@ -337,7 +415,7 @@ function position(element) {
     //let h2 = pixToInt(element.style.height) / 2
     //let w2 = pixToInt(element.style.width) / 2
     // size halfs hard coded
-    return [element.offsetTop + 30, element.offsetLeft, 30]
+    return [element.offsetTop + 25, element.offsetLeft, 25]
 }
 
 function size(element) {
@@ -367,10 +445,9 @@ function borderRight(element) {
 }
 
 // frames for powerUps (coins, lives , diamonds)
-
-let hFrame = 0;
-let cFrame = 0;
-let dFrame = 0;
+var hFrame = 0;
+var cFrame = 0;
+var dFrame = 0;
 
 function hFrames() {
     heartImg.forEach(h => {
@@ -391,7 +468,6 @@ function cFrames() {
 }
 
 function dFrames() {
-
     let diamondImg = document.querySelectorAll(".diamond");
     diamondImg.forEach(d => {
         d.style.backgroundImage = `url('assets/images/diamond${dFrame}.png')`;
