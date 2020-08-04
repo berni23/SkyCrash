@@ -5,6 +5,7 @@ var gameFinished = document.querySelector(".game-finished");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
+var btnBackMain = document.querySelector("#back-main");
 var buttonsMode = document.querySelector(".buttons-mode");
 var childBtnsMode = buttonsMode.children;
 var carouselColor = document.querySelector(".carousel-color");
@@ -47,7 +48,7 @@ var currentKey;
 var currentMode = "EASY";
 var currentColor = colors[0];
 
-var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1];
+var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1]; // wel.. it's hard to explain :)
 var numBoxes = 6; //array wise! ( real number minus 1)
 var bMargin = 15;
 var bSize = 50;
@@ -145,13 +146,20 @@ function updateLife() {
 
 }
 
+// some event listeners
+
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
+btnBackMain.addEventListener("click", backToMain);
+
 
 function validateForm() {
     switch (stepForm) {
         case 0: { // username
             let username = inputName.value;
+            inputName.value = "";
+
+
             if (username != "") {
                 createUser(username);
                 showStep1Form();
@@ -186,6 +194,7 @@ function validateForm() {
             soundStart.play();
             counterBack(cuentaAtras);
             mainSection.classList.add("hidden");
+            includeObjects();
             break;
         }
     }
@@ -229,13 +238,12 @@ function showRanking() {
     gameFinished.classList.remove("hidden");
 }
 
-
 function startGame() {
     gameSection.classList.remove("hidden");
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     initializeLoops();
-    setTimeout(pushObstacle, arrObs[0][0])
+    setTimeout(pushObstacle, arrObs[0][0]);
 
 }
 
@@ -248,15 +256,30 @@ function initializeLoops() {
 
 function finishLoops() {
 
+    // finish loops and reset variables
     clearInterval(intHframes);
     clearInterval(intCframes);
-    clearInterval(gameLoop);
     clearTimeout(timeObstacle);
+    clearTimeout(powerUpTimer);
+    clearTimeout(timeDamaged);
 
-    var gameItems = gameContainer.children
-    for (i = 0; i < gameItems.length; i++) {
-        gameItems[i].remove();
-    }
+    arrObs = [];
+    numObs = 0;
+    power = false;
+    damaged = false;
+    // delete all objects in the game except for the main box
+    var children = gameContainer.children;
+    gameContainer.innerHTML = '';
+    box.style.marginLeft = "750px";
+    box.style.marginTop = "250px";
+    gameContainer.appendChild(box);
+
+    storeUserInfo();
+    updateRanking();
+    showRanking();
+
+    console.log(gameContainer.children.length);
+    console.log(gameContainer.children);
 }
 
 function storeUserInfo() {
@@ -292,7 +315,6 @@ function updateRanking() {
 
         }
 
-
     }
 
     var userName = document.createElement("li");
@@ -305,6 +327,18 @@ function updateRanking() {
     userTitle.insertAdjacentElement('afterend', userName);
     scoreTitle.insertAdjacentElement('afterend', finalScore);
     timeTitle.insertAdjacentElement('afterend', finalTime);
+
+    btnBackMain.classList.remove("hidden");
+}
+
+function backToMain() {
+
+    inputName.classList.remove("hidden");
+    gameFinished.classList.add("hidden");
+    btnBackMain.classList.add("hidden");
+    mainSection.classList.remove("hidden");
+    stepForm = -1;
+    nextStepForm();
 }
 
 
@@ -313,7 +347,7 @@ game logic implementation
 */
 
 nextStepForm();
-includeObjects();
+
 
 function detectKey(e) {
     if (e.keyCode == '87' || e.keyCode == '83' || e.keyCode == '65' || e.keyCode == '68') {
@@ -337,9 +371,13 @@ var limitRight = gWidth - boxSize - marginGame;
 var bH2 = boxSize / 2
 var vBox = 4;
 var vOthers = 3;
-const gameInt = 10 // gameInterval
+var gameInt = 10; // gameInterval
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
+
+
+var timeDamaged;
+var powerUpTimer;
 
 function keyLoop() {
     let posLeft = box.offsetLeft;
@@ -361,14 +399,14 @@ function keyLoop() {
 
                 currentLife--;
                 damaged = true;
-                setTimeout(damagedFinished, 1500);
+                timeDamaged = setTimeout(damagedFinished, 1500);
                 document.querySelectorAll(".heart")[0].remove();
 
                 if (currentLife <= 0) {
+
+                    clearInterval(gameLoop);
                     finishLoops();
-                    storeUserInfo();
-                    updateRanking();
-                    showRanking();
+
                 }
 
             } else if (childGame[i].classList.contains("coin")) {
@@ -385,7 +423,7 @@ function keyLoop() {
                 power = true;
                 soundPup.play();
                 soundPup.currentTime = 0;
-                setTimeout(pUpFinished, 6000);
+                powerUpTimer = setTimeout(pUpFinished, 6000);
             }
             childGame[i].remove();
         } else if (!borderLeft(childGame[i])) {
