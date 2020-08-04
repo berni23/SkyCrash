@@ -274,6 +274,43 @@ ul {
     display: flex;
 }
 
+
+.ranking {
+
+
+    margin: 30px;
+    padding: 20px;
+    display: flex;
+}
+
+.ranking li {
+
+    margin: 10px;
+}
+
+.title-ranking {
+
+    font-size: 30px;
+}
+
+
+.user,
+.score,
+.time {
+
+    font-family: serif;
+}
+
+.user-title,
+.score-title,
+.time-title {
+
+    border: 1px solid var(--color-primary);
+    padding: 5px;
+    font-family: 'header-font';
+}
+
+
 /*.game-finished>div{
 
 

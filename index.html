@@ -34,7 +34,7 @@
         <audio id="sound-start" src="assets/sounds/start.mp3" onended="startGame()"></audio>
     </section>
 
-    <p id="cuenta-atras"> </p>
+    <p id="cuenta-atras"></p>
     <section class="game-wrapper hidden">
         <audio id="sound-coin" src="assets/sounds/sound_coin.mp3"></audio>
         <audio id="sound-powerup" src="assets/sounds/powerUp.mp3"></audio>
@@ -42,8 +42,6 @@
             <h3>Status</h3>
             <div class="status">
                 <ul class="lives">
-                    <!--<li class="heart"></li>
-                    <li class="heart"></li> -->
                 </ul>
                 <br>
                 <ul>
@@ -56,22 +54,29 @@
             <div id="myId" class="box" style=" z-index: 10; width:50px; height:50px"></div>
         </div>
     </section>
-
     <section class="game-finished container hidden">
-
-        <div class="easy-mode">
-
-            <p>Easy Mode</p>
-            <ul></ul>
-
+        <div class="easy-mode container ranking">
+            <p class="title-ranking">Easy Mode</p>
+            <ul class="user">
+                <li class="user-title">
+                    users
+                </li>
+            </ul>
+            <ul class="score">
+                <li class="score-title">
+                    score
+                </li>
+            </ul>
+            <ul class="time">
+                <li class="time-title">
+                    time
+                </li>
+            </ul>
         </div>
-
-        <div class="medium-mode">
-            <p>Medium Mode</p>
+        <div class="medium-mode container ranking">
+            <p class="title-ranking">Medium Mode</p>
             <ul></ul>
         </div>
-
-
     </section>
 </body>
 

@@ -1,7 +1,7 @@
 var mainSection = document.querySelector(".main");
 var gameContainer = document.querySelector(".game");
 var gameSection = document.querySelector(".game-wrapper");
-var gameFinshed = document.querySelector(".game-finished");
+var gameFinished = document.querySelector(".game-finished");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
@@ -42,10 +42,9 @@ var soundStart = document.getElementById('sound-start');
 var numCoins = document.querySelector(".coin-number");
 // vars related to the current match being played, vars set to "easy" mode by default;
 var currentUser;
-var currentScore;
 var currentLife = 5;
 var currentKey;
-var currentMode;
+var currentMode = "EASY";
 var currentColor = colors[0];
 
 var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1];
@@ -123,10 +122,10 @@ function updateColor(event) {
 
 function updateLife() {
 
-    console.log(currentMode);
 
     switch (currentMode) {
         case "EASY":
+
             currentLife = 5;
             break;
         case "MEDIUM":
@@ -225,7 +224,7 @@ function showStep3Form() {
     btnReady.classList.remove("hidden");
 }
 
-function showRankings() {
+function showRanking() {
 
     gameSection.classList.add("hidden");
     gameFinished.classList.remove("hidden");
@@ -255,7 +254,7 @@ function finishLoops() {
     clearInterval(intCframes);
     clearInterval(gameLoop);
     clearTimeout(timeObstacle);
-    showRankings();
+
     var gameItems = gameContainer.children
     for (i = 0; i < gameItems.length; i++) {
         gameItems[i].remove();
@@ -263,13 +262,36 @@ function finishLoops() {
 }
 
 function storeUserInfo() {
-
-
     var time = new Date();
-    Users[currentUser].score = currentScore;
-    Users[currentUser].time = time.getTime(); - gameTimer.getTime();
+    Users[currentUser].score = Number(numCoins.textContent);
+    numCoins.textContent = '0';
+    Users[currentUser].time = minSec(time.getTime() - gameTimer.getTime());
 
 }
+
+function updateRanking() {
+    switch (Users[currentUser].mode) {
+        case "EASY": {
+
+            var scoreTitle = document.querySelector(".easy-mode .score-title");
+            var timeTitle = document.querySelector(".easy-mode ul .time-title");
+            var userTitle = document.querySelector(".easy-mode ul .user-title");
+        }
+    }
+
+    var userName = document.createElement("li");
+    userName.textContent = Users[currentUser].username;
+    var finalScore = document.createElement("li");
+    finalScore.textContent = Users[currentUser].score;
+    var finalTime = document.createElement("li");
+    finalTime.textContent = Users[currentUser].time;
+
+
+    userTitle.insertAdjacentElement('afterend', userName);
+    scoreTitle.insertAdjacentElement('afterend', finalScore);
+    timeTitle.insertAdjacentElement('afterend', finalTime);
+}
+
 
 /* start form completion
 game logic implementation
@@ -277,10 +299,6 @@ game logic implementation
 
 nextStepForm();
 includeObjects();
-
-
-
-
 
 function detectKey(e) {
     if (e.keyCode == '87' || e.keyCode == '83' || e.keyCode == '65' || e.keyCode == '68') {
@@ -321,12 +339,9 @@ function keyLoop() {
     } else if (currentKey == '68' && borderRight(box)) {
         box.style.marginLeft = (posLeft + vBox) + "px";
     }
-    //collision(box, collider);
 
     for (let i = 1; i < childGame.length; i++) {
-
         if (collision(box, childGame[i])) {
-
             if (childGame[i].classList.contains("blue-box") && !power && !damaged) {
 
                 currentLife--;
@@ -335,9 +350,10 @@ function keyLoop() {
                 document.querySelectorAll(".heart")[0].remove();
 
                 if (currentLife <= 0) {
-
                     finishLoops();
                     storeUserInfo();
+                    updateRanking();
+                    showRanking();
                 }
 
             } else if (childGame[i].classList.contains("coin")) {
@@ -496,7 +512,6 @@ function mixedWall(type1, type2, tInt = 50) {
 
 function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), holeBoolean = []) {
 
-    console.log(arrayHoles);
     if (holeBoolean.length == 0) {
         holeBoolean = populateArray(num, true);
     }
