@@ -28,6 +28,12 @@ var currentLife = 3;
 var currentKey;
 var currentMode;
 var currentColor = colors[0];
+
+
+var numBoxes = 6; //array wise! ( real number minus 1)
+var bMargin = 15;
+var bSize = 50;
+
 var Users = {
 
 }
@@ -287,7 +293,7 @@ function includeObjects() {
     addObject(1, 600, "250px", "blue-box")
     obstacleWall(true, 2);
     obstacleWall(false, 2);
-    addObject(1, 2000, "400px", "coin");
+    addObject(1, 2000, "400px");
     obstacleWall(true, 2, timeInt = 100, send = "reversed");
     addObject(1, 2000, "80px");
     obstacleWall(true, 3, timeInt = 100);
@@ -296,14 +302,15 @@ function includeObjects() {
     randObject(4, 300, "blue-box");
     randObject(100, 50);
     addObject(1, 500, "250px");
-    addObject(1, 50, "100px", "same-box");
+    addObject(1, 50, "50px", "same-box");
+    addObject(1, 50, "100px", "blue-box");
+    addObject(1, 50, "150px", "same-box");
     addObject(1, 50, "200px", "blue-box");
-    addObject(1, 50, "300px", "same-box");
-    addObject(1, 50, "400px", "blue-box");
-    addObject(1, 50, "500px", "same-box");
-
-
+    addObject(1, 50, "250px", "same-box");
+    addObject(1, 50, "250px", "blue-box");
     randObject(40, 200, "blue-box");
+    addObject(1, 2000, "400px");
+    // mixedWall("blue-box", "same-box", tInt = 50)
 
 
 }
@@ -334,11 +341,10 @@ function addObject(num, interval, position, type = "coin") {
 
 }
 
+
+
 function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "normal") {
 
-    let numBoxes = 6; //array wise! ( real number minus 1)
-    let margin = 15;
-    let bSize = 50;
     if (holeNum == 'undefined') {
         holeNum = Math.floor(numBoxes / 2)
     }
@@ -356,11 +362,28 @@ function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "
 
     function setPosition(i) {
         if (send == "reversed") {
-            return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * margin)
+            return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * bMargin)
         } else {
-            return intToPix(i * bSize + (i + 1) * margin);
+            return intToPix(i * bSize + (i + 1) * bMargin);
         }
     }
+}
+
+function mixedWall(type1, type2, tInt = 50) {
+
+    for (let i = 0; i <= numBoxes; i++) {
+
+        if (i % 2 == 0) {
+
+            arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type1])
+        } else {
+
+            arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type2])
+
+        }
+
+    }
+
 }
 
 function snakeWall(num, holes, tInt = 50) {
@@ -379,10 +402,6 @@ function randObject(num, tInt, type = "coin") {
     for (let i = 0; i < num; i++) {
         arrObs.push([tInt, randPos(), type])
     }
-}
-
-function wait(time) {
-    arrObs.push([time, "50px", "time"]);
 }
 
 function randPos() {
