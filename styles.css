@@ -111,6 +111,7 @@ body {
     outline: none;
     box-shadow: none;
     font-weight: bold;
+    font-family: 'headerFont';
 
     -webkit-transform: translatey(0px);
     -webkit-animation: float 6s ease-in-out infinite;
@@ -144,6 +145,12 @@ body {
     -webkit-animation: shadow 6s ease-in-out;
 }
 
+
+.mode-selected {
+
+    box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
+
+}
 
 .input-name {
 
@@ -254,6 +261,13 @@ body {
 }
 
 
+.power-up {
+
+    animation: glowing 3s ease-in-out infinite;
+    -webkit-animation: glowing 3s ease-in-out infinite;
+
+}
+
 
 /* last class, as it acquires higher priority upon the other display options*/
 .hidden {
@@ -262,6 +276,24 @@ body {
 
 
 
+@keyframes glowing {
+
+    0% {
+        background-color: rgba(135, 206, 250, 1);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
+    }
+
+    50% {
+        background-color: rgba(135, 206, 250, 0.2);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 0.2);
+    }
+
+    100% {
+        background-color: rgba(135, 206, 250, 1);
+        box-shadow: 0 0px 50px 0px rgba(135, 206, 250, 1);
+    }
+
+}
 
 @keyframes transColor {
 

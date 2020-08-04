@@ -19,13 +19,13 @@ var gameTimer;
 var coinSound = document.getElementById('sound-coin');
 var soundClick = document.getElementById('sound-click');
 var soundStart = document.getElementById('sound-start');
+var numCoins = document.querySelector(".coin-number");
 // vars related to the current match being played, vars set to "easy" mode by default;
 var currentUser;
 var currentScore;
 var currentLife = 3;
 var currentKey;
 var currentMode;
-var currentCoins;
 var Users = {
 
 }
@@ -81,6 +81,10 @@ for (let i = 0; i < childBtnsMode.length; i++) {
 }
 
 function updateMode(event) {
+
+    modeSelected = document.querySelector(".mode-selected")
+    modeSelected.classList.remove("mode-selected");
+    event.target.classList.add("mode-selected");
     currentMode = event.target.textContent;
 
 }
@@ -178,7 +182,7 @@ function startGame() {
     setTimeout(pushObstacle, arrObs[0][0])
     let intHrames = setInterval(hFrames, 500);
     let intCframes = setInterval(cFrames, 200);
-    keyLoop();
+    let gameLoop = setInterval(keyLoop, 8);
     // set a counter with 1 2 3 in the screen
 }
 /* start form completion */
@@ -233,24 +237,27 @@ function keyLoop() {
     for (i = 1; i < childGame.length; i++) {
 
         if (collision(box, childGame[i])) {
-            if (childGame[i].classList.contains("coin")) {
-                currentCoins++;
+            if (childGame[i].classList.contains("blue-box")) {
+                currentLife--;
+            } else if (childGame[i].classList.contains("coin")) {
+
+                numCoins.textContent = Number(numCoins.textContent) + 1;
+
                 coinSound.play();
                 coinSound.currentTime = 0
-                console.log('coin-collision');
-            } else {
-                currentLife--;
+            } else if (childGame[i].classList.contains("diamond")) {
+                numCoins.textContent = Number(numCoins.textContent) + 5;
+                coinSound.play();
+                coinSound.currentTime = 0;
             }
             childGame[i].remove();
         } else if (!borderLeft(childGame[i])) {
-            childGame[i].remove()
+            childGame[i].remove();
         } else {
             childGame[i].style.marginLeft = (childGame[i].offsetLeft - vBox) + "px";
         }
     }
-    setTimeout(keyLoop, 8);
 }
-
 
 /* create obstacles */
 
