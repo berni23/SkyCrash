@@ -123,13 +123,18 @@ function updateColor(event) {
 
 function updateLife() {
 
+    console.log(currentMode);
+
     switch (currentMode) {
         case "EASY":
             currentLife = 5;
+            break;
         case "MEDIUM":
             currentLife = 3;
+            break;
         case "HARD":
             currentLife = 1;
+            break;
     }
 
     for (i = 0; i < currentLife; i++) {
