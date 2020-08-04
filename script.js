@@ -29,7 +29,6 @@ var currentKey;
 var currentMode;
 var currentColor = colors[0];
 
-
 var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1];
 var numBoxes = 6; //array wise! ( real number minus 1)
 var bMargin = 15;
@@ -277,10 +276,10 @@ function keyLoop() {
 
         if (collision(box, childGame[i])) {
 
-            if (childGame[i].classList.contains("blue-box") && !power) {
+            if (childGame[i].classList.contains("blue-box") && !power && !damaged) {
 
                 currentLife--;
-                power = true;
+                damaged = true;
                 setTimeout(pUpFinished, 1500);
 
                 //document.querySelectorAll(".heart")[0].remove();
@@ -314,9 +313,18 @@ function keyLoop() {
 function includeObjects() {
 
 
-    //snakeWall(12, [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], tInt = 150);
-    snakeWall(arrayHoles = shuffle(defaultHoles.slice()));
+    firstWave();
+    secondWave();
+    thirdWave();
+    //secondWave();
+    //thirdWave();
+
 }
+
+
+
+
+
 
 function firstWave() {
 
@@ -330,29 +338,41 @@ function firstWave() {
     obstacleWall(true, 2, timeInt = 100, send = "reversed");
     wait(2000);
     obstacleWall(true, 3, timeInt = 100);
-    snakeWall(num = 10, arrayHoles = [2, 3, 1, 1, 3, 2, 2, 3, 1, 1], tInt = 150);
+    snakeWall(10, 150, arrayHoles = [2, 3, 1, 5, 3, 2, 2, 3, 4, 1]);
     addObject(1, 300, "250px", "diamond");
     randObject(4, 300, "blue-box");
     randObject(100, 50);
+    randObject(1, 20, "same-box");
     randObject(40, 200, "blue-box");
     wait(2000);
-    mixedWall("blue-box", "same-box", tInt = 50)
-    snakeWall(tInt = 150);
+    mixedWall("blue-box", "same-box", tInt = 50);
+    snakeWall(5, 100);
+
     wait(1000);
     addObject(1, 50, "250px", "diamond");
     addObject(1, 250, "250px", "blue-box");
     coinLadder();
+
 }
 
 function secondWave() {
 
-    snakeRand(tInt = 150);
+    snakeWall();
+    obstacleWall(true, timeInt = 100);
     wait(1000);
-    addObject(1, 300, "same-box");
+    addObject(1, 300, "250px", "same-box");
     randObject(50, 170, "blue-box");
+    wait(500);
     tunnel(10, 3);
     wait(500);
-    tunnel(10, 4);
+    tunnel(10, 5);
+    coinLadder();
+}
+
+function thirdWave() {
+
+    snakeWall(15, arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2])
+
 }
 
 
@@ -378,7 +398,7 @@ function pushObstacle() {
 }
 
 // add a given number of coin
-function addObject(num, interval, position, type = "coin") {
+function addObject(num, interval, position = "250px", type = "coin") {
     for (let i = 0; i < num; i++) {
         arrObs.push([interval, position, type])
     }
@@ -422,13 +442,12 @@ function mixedWall(type1, type2, tInt = 50) {
             arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type2])
 
         }
-
     }
-
 }
 
-function snakeWall(num = 12, arrayHoles = defaultHoles.slice(), tInt = 150, holeBoolean = []) {
+function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), holeBoolean = []) {
 
+    console.log(arrayHoles);
     if (holeBoolean.length == 0) {
         holeBoolean = populateArray(num, true);
     }
@@ -523,11 +542,16 @@ function shuffle(a) {
 }
 
 var power = false;
+var damaged = false;
 
 function pUpFinished() {
 
     box.classList.remove("power-up");
     power = false;
+}
+
+function damaged() {
+    damaged = false;
 }
 
 function pixToInt(pixels) {
