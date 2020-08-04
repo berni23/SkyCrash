@@ -11,7 +11,7 @@ var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".sp
 var colors = ["rgba(191, 85, 236, 0.8)", "rgba(0,128,0, 0.8)", "rgba(255, 0, 0, 0.8)"]
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
-var heartImg = document.querySelectorAll(".heart");
+
 var cuentaAtras = document.querySelector("#cuenta-atras");
 var stepForm = -1; // to be set at -1
 var gameTimer;
@@ -24,7 +24,7 @@ var numCoins = document.querySelector(".coin-number");
 // vars related to the current match being played, vars set to "easy" mode by default;
 var currentUser;
 var currentScore;
-var currentLife = 3;
+var currentLife = 5;
 var currentKey;
 var currentMode;
 var currentColor = colors[0];
@@ -328,12 +328,16 @@ function pushObstacle() {
     gameContainer.appendChild(newObs);
     numObs++;
 
-    if (numObs < arrObs.length) {
-        setTimeout(pushObstacle, arrObs[numObs][0]);
+    if (numObs >= arrObs.length) {
+
+        numObs = 0;
+        arrObs = shuffle(arrObs);
+
     }
+    setTimeout(pushObstacle, arrObs[numObs][0]);
 }
 
-// add a given number of coins
+// add a given number of coin
 function addObject(num, interval, position, type = "coin") {
     for (let i = 0; i < num; i++) {
         arrObs.push([interval, position, type])
@@ -370,7 +374,7 @@ function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "
 }
 
 function mixedWall(type1, type2, tInt = 50) {
-
+    obstacleWall
     for (let i = 0; i <= numBoxes; i++) {
 
         if (i % 2 == 0) {
@@ -386,15 +390,29 @@ function mixedWall(type1, type2, tInt = 50) {
 
 }
 
-function snakeWall(num, holes, tInt = 50) {
+function snakeWall(num, holes, tInt = 50, holeBoolean) {
+
+    if (holeBoolean == "undefined") {
+        holeBoolean = populateArray(num, true);
+    }
 
     for (let i = 0; i < num; i++) {
         if (i % 2 == 0) {
-            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "normal");
+            obstacleWall(hole = holeBoolean[i], holeNum = holes[i], timeInt = tInt, send = "normal");
         } else {
-            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "reversed");
+            obstacleWall(hole = holeBoolean[i], holeNum = holes[i], timeInt = tInt, send = "reversed");
         }
     }
+}
+
+
+function snakeTwelve() {
+
+    var holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1];
+
+    snakeWall(12, shuffle(holes))
+
+
 }
 
 function randObject(num, tInt, type = "coin") {
@@ -413,6 +431,27 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 // UTILS //
+
+function populateArray(l, item) {
+
+    var array;
+    for (i = 0; i < l; i++) {
+        array.push(item);
+    }
+
+    return array;
+}
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
 
 var power = false;
 
@@ -469,6 +508,7 @@ var cFrame = 0;
 var dFrame = 0;
 
 function hFrames() {
+    var heartImg = document.querySelectorAll(".heart");
     heartImg.Each(h => {
         h.style.backgroundImage = `url('assets/images/heart${hFrame}.png')`
     })
