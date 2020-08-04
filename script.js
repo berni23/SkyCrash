@@ -308,6 +308,13 @@ function keyLoop() {
 
 function includeObjects() {
 
+    firstWave();
+
+
+}
+
+function firstwave() {
+
     addObject(10, 300, "250px"); // if object not specified, it is a coin
     obstacleWall(hole = false);
     wait(3000);
@@ -325,12 +332,18 @@ function includeObjects() {
     randObject(40, 200, "blue-box");
     wait(2000);
     mixedWall("blue-box", "same-box", tInt = 50)
-    snakeTwelve(tInt = 150;);
+    snakeTwelve(tInt = 150);
     wait(1000);
-
-
+    addObject(1, 50, "250px", "diamond");
+    addObject(1, 250, "250px", "blue-box");
 
 }
+
+function secondWave() {
+
+    snakeTwelve(tInt = 150);
+}
+
 
 function pushObstacle() {
 
