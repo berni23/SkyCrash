@@ -11,29 +11,34 @@ var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".sp
 var colors = ["rgba(191, 85, 236, 0.8)", "rgba(0,128,0, 0.8)", "rgba(255, 0, 0, 0.8)"]
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
-var heartImg = document.querySelectorAll(".heart");
 var cuentaAtras = document.querySelector("#cuenta-atras");
+var livesStatus = document.querySelector(".lives");
 var stepForm = -1; // to be set at -1
-var gameTimer;
-//coins audio
+
+
+
+//audio
 var coinSound = document.getElementById('sound-coin');
 var soundPup = document.getElementById('sound-powerup');
 var soundClick = document.getElementById('sound-click');
 var soundStart = document.getElementById('sound-start');
 var numCoins = document.querySelector(".coin-number");
 // vars related to the current match being played, vars set to "easy" mode by default;
+var gameTimer;
 var currentUser;
 var currentScore;
-var currentLife = 3;
+var currentLife = 5;
 var currentKey;
 var currentMode;
 var currentColor = colors[0];
 
+var numObs = 0;
+var arrObs = [];
+var arrPhases = [];
 
 var numBoxes = 6; //array wise! ( real number minus 1)
 var bMargin = 15;
 var bSize = 50;
-
 var Users = {
 
 }
@@ -41,8 +46,8 @@ var Users = {
 
 colors.forEach(color => {
 
-    let li = document.createElement("li");
-    let btnColor = document.createElement("button");
+    var li = document.createElement("li");
+    var btnColor = document.createElement("button");
     btnColor.style.backgroundColor = color;
     btnColor.style.width = "60px";
     btnColor.style.height = "60px";
@@ -58,9 +63,9 @@ function nextStepForm() {
 }
 
 function displayLetters(charArray, element) {
-    let counter = 0;
-    let displayedString = "";
-    let timer = setInterval(displayLetter, 200);
+    var counter = 0;
+    var displayedString = "";
+    var timer = setInterval(displayLetter, 200);
 
     function displayLetter() {
         displayedString += charArray[counter];
@@ -74,24 +79,24 @@ function displayLetters(charArray, element) {
 
 function createUser(newUser) {
     newUser = newUser.trim();
-    let user = {
+    var user = {
         username: newUser,
         mode: "EASY",
         color: colors[0],
         time: undefined,
-        score: 0
+        score: 0,
     }
     Users[newUser] = user;
     currentUser = newUser;
 }
 
-for (let i = 0; i < childBtnsMode.length; i++) {
+for (i = 0; i < childBtnsMode.length; i++) {
     childBtnsMode[i].addEventListener("click", updateMode);
 }
 
 function updateMode(event) {
 
-    modeSelected = document.querySelector(".mode-selected")
+    var modeSelected = document.querySelector(".mode-selected")
     modeSelected.classList.remove("mode-selected");
     event.target.classList.add("mode-selected");
     currentMode = event.target.textContent;
@@ -103,13 +108,34 @@ function updateColor(event) {
     Users[currentUser].color = currentColor;
 }
 
+function updateLife() {
+
+    switch (currentMode) {
+        case "EASY":
+            currentLife = 5;
+        case "MEDIUM":
+            currentLife = 3;
+        case "HARD":
+            currentLife = 1;
+
+    }
+
+    for (i = 0; i < currentLife; i++) {
+
+        var heart = document.createElement("li");
+        heart.classList.add("heart");
+        livesStatus.appendChild(heart);
+    }
+
+}
+
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
 
 function validateForm() {
     switch (stepForm) {
         case 0: { // username
-            let username = inputName.value;
+            var username = inputName.value;
             if (username != "") {
                 createUser(username);
                 showStep1Form();
@@ -122,6 +148,7 @@ function validateForm() {
         case 1: { //mode
 
             Users[currentUser].mode = currentMode;
+            updateLife();
             showStep2Form();
             nextStepForm();
             soundClick.play();
@@ -148,14 +175,14 @@ function validateForm() {
         }
     }
 }
-let cBack = ["3", "2", "1", "0", "GO!", ""];
+var cBack = ["3", "2", "1", "0", "GO!", ""];
 
 function counterBack(element) {
-    let counter = 0;
-    let timer = setInterval(displayNum, 800);
+    var counter = 0;
+    var timer = setInterval(displayNum, 800);
 
     function displayNum() {
-        let num = cBack[counter];
+        var num = cBack[counter];
         element.textContent = num;
         counter++;
         if (counter == cBack.length) {
@@ -182,9 +209,9 @@ function showStep3Form() {
     btnReady.classList.remove("hidden");
 }
 
-let intHrames;
-let intCframes;
-let gameLoop;
+var intHrames;
+var intCframes;
+var gameLoop;
 
 function startGame() {
     gameSection.classList.remove("hidden");
@@ -197,16 +224,15 @@ function startGame() {
 
 function initializeLoops() {
 
-    let intHrames = setInterval(hFrames, 500);
-    let intCframes = setInterval(cFrames, 200);
-    let gameLoop = setInterval(keyLoop, gameInt);
+    intHrames = setInterval(hFrames, 500);
+    intCframes = setInterval(cFrames, 200);
+    gameLoop = setInterval(keyLoop, gameInt);
 
 }
 /* start form completion */
 nextStepForm();
 
-var numObs = 0;
-var arrObs = [];
+
 includeObjects();
 /* game logic implementation*/
 
@@ -224,22 +250,26 @@ function removeKey(e) {
 }
 
 // game constraints
-const gWidth = 1500;
-const gHeight = 500;
-const boxSize = pixToInt(box.style.width);
-const marginGame = 5;
-const limitBottom = gHeight - boxSize - marginGame;
-const limitRight = gWidth - boxSize - marginGame;
-const bH2 = boxSize / 2
+var gWidth = 1500;
+var gHeight = 500;
+var boxSize = pixToInt(box.style.width);
+var marginGame = 5;
+var limitBottom = gHeight - boxSize - marginGame;
+var limitRight = gWidth - boxSize - marginGame;
+var bH2 = boxSize / 2
 var vBox = 4;
-const gameInt = 10 // gameInterval
+var gameInt = 10 // gameInterval
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
+var posLeft;
+var postTop;
+var childGame;
+
 function keyLoop() {
-    let posLeft = box.offsetLeft;
-    let posTop = box.offsetTop;
-    let childGame = gameContainer.children;
+    posLeft = box.offsetLeft;
+    posTop = box.offsetTop;
+    childGame = gameContainer.children;
 
     if (currentKey == '87' && borderTop(box)) {
         box.style.marginTop = (posTop - vBox) + "px";
@@ -253,12 +283,11 @@ function keyLoop() {
     //collision(box, collider);
 
     for (i = 1; i < childGame.length; i++) {
-
         if (collision(box, childGame[i])) {
             console.log(currentLife);
-
             if (childGame[i].classList.contains("blue-box") && !power) {
                 currentLife--;
+                //document.querySelectorAll(".heart")[0].remove();
             } else if (childGame[i].classList.contains("coin")) {
                 numCoins.textContent = (Number(numCoins.textContent) + 1).toString();
                 coinSound.play();
@@ -285,15 +314,16 @@ function keyLoop() {
 }
 /* create obstacles */
 
-function includeObjects() {
+
+function firstWave() {
 
     addObject(10, 300, "250px"); // if object not specified, it is a coin
     obstacleWall(hole = false);
-    addObject(1, 5000, "250px");
+    wait(5000);
     addObject(1, 600, "250px", "blue-box")
     obstacleWall(true, 2);
     obstacleWall(false, 2);
-    addObject(1, 2000, "400px");
+    wait(2000);
     obstacleWall(true, 2, timeInt = 100, send = "reversed");
     addObject(1, 2000, "80px");
     obstacleWall(true, 3, timeInt = 100);
@@ -302,22 +332,36 @@ function includeObjects() {
     randObject(4, 300, "blue-box");
     randObject(100, 50);
     addObject(1, 500, "250px");
-    addObject(1, 50, "50px", "same-box");
-    addObject(1, 50, "100px", "blue-box");
-    addObject(1, 50, "150px", "same-box");
-    addObject(1, 50, "200px", "blue-box");
-    addObject(1, 50, "250px", "same-box");
-    addObject(1, 50, "250px", "blue-box");
+    mixedWall("blue-box", "same-box", tInt = 50)
+    wait(500);
     randObject(40, 200, "blue-box");
     addObject(1, 2000, "400px");
-    // mixedWall("blue-box", "same-box", tInt = 50)
+
+}
+
+function secondWave() {
+
+
+    snakeOfTwelve();
+    wait(1000);
+    snakeOfTwelve();
 
 
 }
 
+function includeObjects() {
+
+
+    secondWave();
+
+
+}
+
+var tObstacle;
+
 function pushObstacle() {
 
-    let newObs = document.createElement('div');
+    var newObs = document.createElement('div');
     if (arrObs[numObs][2] == "same-box") {
         newObs.style.backgroundColor = currentColor;
     }
@@ -327,28 +371,33 @@ function pushObstacle() {
     newObs.style.marginTop = arrObs[numObs][1];
     gameContainer.appendChild(newObs);
     numObs++;
+    if (numObs >= arrObs.length) {
 
-    if (numObs < arrObs.length) {
-        setTimeout(pushObstacle, arrObs[numObs][0]);
+        arrObs = shuffle(arrObs);
+        numObs = 0;
     }
+    tObstacle = setTimeout(pushObstacle, arrObs[numObs][0]);
 }
+
 
 // add a given number of coins
 function addObject(num, interval, position, type = "coin") {
-    for (let i = 0; i < num; i++) {
+    for (i = 0; i < num; i++) {
         arrObs.push([interval, position, type])
     }
 
 }
 
-
+function wait(time) {
+    randObject(1, time);
+}
 
 function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "normal") {
 
     if (holeNum == 'undefined') {
         holeNum = Math.floor(numBoxes / 2)
     }
-    for (let i = 0; i <= numBoxes; i++) {
+    for (i = 0; i <= numBoxes; i++) {
         if (i == holeNum) {
             if (!hole) {
                 arrObs.push([timeInt, setPosition(i), "same-box"])
@@ -371,13 +420,10 @@ function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "
 
 function mixedWall(type1, type2, tInt = 50) {
 
-    for (let i = 0; i <= numBoxes; i++) {
-
+    for (i = 0; i <= numBoxes; i++) {
         if (i % 2 == 0) {
-
             arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type1])
         } else {
-
             arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type2])
 
         }
@@ -386,31 +432,65 @@ function mixedWall(type1, type2, tInt = 50) {
 
 }
 
-function snakeWall(num, holes, tInt = 50) {
+function snakeWall(num, holes, tInt = 50, holeBoolean) {
 
-    for (let i = 0; i < num; i++) {
+    if (holeBoolean == undefined) {
+        holeBoolean = populateArray(num, true);
+    }
+
+    for (i = 0; i < num; i++) {
         if (i % 2 == 0) {
-            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "normal");
+            obstacleWall(hole = holeBoolean, holeNum = holes[i], timeInt = tInt, send = "normal");
         } else {
-            obstacleWall(hole = true, holeNum = holes[i], timeInt = tInt, send = "reversed");
+            obstacleWall(hole = holeBoolean, holeNum = holes[i], timeInt = tInt, send = "reversed");
         }
     }
 }
 
+function populateArray(l, item) {
+
+    var array = [];
+    for (i = 0; i < l; i++) {
+        array.push(item);
+    }
+    return array;
+}
+
+function snakeOfTwelve() {
+
+    var arrPos = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1];
+    holeBoolean = populateArray(12, true);
+    holeBoolean[6] = false;
+    snakeWall(12, shuffle(arrPos), tInt = 150);
+}
+
 function randObject(num, tInt, type = "coin") {
 
-    for (let i = 0; i < num; i++) {
+    for (i = 0; i < num; i++) {
         arrObs.push([tInt, randPos(), type])
     }
 }
 
 function randPos() {
     return intToPix(getRandomInt(430));
-
 }
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
+}
+
+function shuffle(array) {
+    var currentIndex = array.length,
+        temp, randIndex;
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temp = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randIndex] = temp;
+    }
+
+    return array;
 }
 // UTILS //
 
@@ -431,8 +511,8 @@ function intToPix(integer) {
 }
 
 function position(element) {
-    //let h2 = pixToInt(element.style.height) / 2
-    //let w2 = pixToInt(element.style.width) / 2
+    //var h2 = pixToInt(element.style.height) / 2
+    //var w2 = pixToInt(element.style.width) / 2
     // size halfs hard coded
     return [element.offsetTop + 25, element.offsetLeft, 25]
 }
@@ -442,8 +522,8 @@ function size(element) {
 }
 
 function collision(element1, element2) {
-    let p1 = position(element1);
-    let p2 = position(element2);
+    var p1 = position(element1);
+    var p2 = position(element2);
     return (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2]))
 }
 
@@ -469,6 +549,8 @@ var cFrame = 0;
 var dFrame = 0;
 
 function hFrames() {
+
+    var heartImg = document.querySelectorAll(".heart");
     heartImg.forEach(h => {
         h.style.backgroundImage = `url('assets/images/heart${hFrame}.png')`
     })
@@ -476,7 +558,7 @@ function hFrames() {
 }
 
 function cFrames() {
-    let coinImg = document.querySelectorAll(".coin");
+    var coinImg = document.querySelectorAll(".coin");
     coinImg.forEach(c => {
         c.style.backgroundImage = `url('assets/images/coin_${cFrame}.png')`;
     })
@@ -487,15 +569,15 @@ function cFrames() {
 }
 
 function dFrames() {
-    let diamondImg = document.querySelectorAll(".diamond");
+    var diamondImg = document.querySelectorAll(".diamond");
     diamondImg.forEach(d => {
         d.style.backgroundImage = `url('assets/images/diamond${dFrame}.png')`;
     })
     dFrame = (dFrame + 1) % 4
 }
 
-/* let posLeft = document.getElementById('myId').style.offsetLeft;
-let posTop = document.getElementById('myId').style.offsetTop;
-let mLeft = document.getElementById('myId').style.marginLeft;
-let mTop = document.getElementById('myId').style.marginTop;
+/* var posLeft = document.getElementById('myId').style.offsetLeft;
+var posTop = document.getElementById('myId').style.offsetTop;
+var mLeft = document.getElementById('myId').style.marginLeft;
+var mTop = document.getElementById('myId').style.marginTop;
  */
