@@ -1,3 +1,4 @@
+// select html elements
 var mainSection = document.querySelector(".main");
 var gameContainer = document.querySelector(".game");
 var gameSection = document.querySelector(".game-wrapper");
@@ -18,44 +19,53 @@ var cuentaAtras = document.querySelector("#cuenta-atras");
 var stepForm = -1; // to be set at -1
 
 //timers, useful to have them in vars in order to stop them
-var gameTimer;
+
+var gameTimer; // date object to compute time spent playing
 var timeObstacle;
 
 // time intervals
 
-var intHframes;
-var intCframes;
-var gameLoop;
+var intHframes; // heart frames
+var intCframes; // coin frames
+var gameLoop; // game interval
 
 
-// current object number that appears
+// current game item  that appears on screen
 var numObs = 0;
 
-// object array that appears on screen
+// array of objects that appear in the game
 var arrObs = [];
 
 
-//coins audio
+//audio effects
+
 var coinSound = document.getElementById('sound-coin');
 var soundPup = document.getElementById('sound-powerup');
 var soundClick = document.getElementById('sound-click');
 var soundStart = document.getElementById('sound-start');
 var numCoins = document.querySelector(".coin-number");
-// vars related to the current match being played, vars set to "easy" mode by default;
+
+// vars related to the current match being played, vars set to "easy" mode by default
+
 var currentUser;
 var currentLife = 5;
 var currentKey;
 var currentMode = "EASY";
 var currentColor = colors[0];
 
-var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1]; // wel.. it's hard to explain :)
-var numBoxes = 6; //array wise! ( real number minus 1)
-var bMargin = 15;
-var bSize = 50;
+var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1]; // array used in the creation of "enemies"
+var numBoxes = 6; // number of boxes that will be sent in column
+var bMargin = 15; //  margin between those boxes
+var bSize = 50; // box size
 
+
+// object were all users wil be stored
 var Users = {
 
 }
+
+
+//  create a div for every color in the array of colors, in order for the user to  select one of them
 
 colors.forEach(color => {
 
@@ -69,6 +79,10 @@ colors.forEach(color => {
     carouselColor.appendChild(li);
 
 })
+
+/*------------------------------------------
+functions for displaying the form titles letter by letter
+-----------------------------------------------*/
 
 function nextStepForm() {
     displayLetters(arrSteps[stepForm + 1], formTitle);
@@ -90,6 +104,10 @@ function displayLetters(charArray, element) {
     }
 }
 
+/*---------------------------------
+create new user
+----------------------------------*/
+
 function createUser(newUser) {
     newUser = newUser.trim();
     let user = {
@@ -103,10 +121,20 @@ function createUser(newUser) {
     currentUser = newUser;
 }
 
+/* event listener for the easy/ medium / hard options*/
+
+
 for (let i = 0; i < childBtnsMode.length; i++) {
     childBtnsMode[i].addEventListener("click", updateMode);
 }
 
+/* -----------------------------
+update the choices made by the user into the " current" variables and also
+the user object
+
+current variables: defined in the global scope in order to acces them as easy as possible
+when looping in the "keyloop"
+------------------------------*/
 function updateMode(event) {
 
     modeSelected = document.querySelector(".mode-selected")
@@ -122,7 +150,6 @@ function updateColor(event) {
 }
 
 function updateLife() {
-
 
     switch (currentMode) {
         case "EASY":
@@ -146,19 +173,25 @@ function updateLife() {
 
 }
 
-// some event listeners
+/*
+some event listeners, for form validation and for going back to the main after
+finishing one match
+ */
 
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
 btnBackMain.addEventListener("click", backToMain);
 
 
+/* ---------------------
+validation function
+---------------------*/
+
 function validateForm() {
     switch (stepForm) {
         case 0: { // username
             let username = inputName.value;
             inputName.value = "";
-
 
             if (username != "") {
                 createUser(username);
@@ -199,7 +232,7 @@ function validateForm() {
         }
     }
 }
-let cBack = ["3", "2", "1", "0", "GO!", ""];
+let cBack = ["3", "2", "1", "0", "GO!", ""]; // count down array for begining the game
 
 function counterBack(element) {
     let counter = 0;
@@ -215,6 +248,10 @@ function counterBack(element) {
         }
     }
 }
+
+/*---------------------------------------------
+functions for hiding / showing sections and elements
+-----------------------------------------------------*/
 
 function showStep1Form() {
     inputName.classList.add("hidden");
@@ -238,19 +275,25 @@ function showRanking() {
     gameFinished.classList.remove("hidden");
 }
 
+
+/*
+------------------------------------------------------------------
+start game function called in the last step of the validation function
+-------------------------------------------------------------------
+ */
 function startGame() {
     gameSection.classList.remove("hidden");
     document.onkeydown = detectKey;
     document.onkeyup = removeKey;
     initializeLoops();
-    setTimeout(pushObstacle, arrObs[0][0]);
+    setTimeout(pushObstacle, arrObs[0][0]); /* timeout for starting to include elements in the game*/
 
 }
 
 function initializeLoops() {
     intHframes = setInterval(hFrames, 500);
     intCframes = setInterval(cFrames, 200);
-    gameLoop = setInterval(keyLoop, gameInt);
+    gameLoop = setInterval(keyLoop, gameInt); /* main loop game */
     gameTimer = new Date();
 }
 
@@ -282,6 +325,8 @@ function finishLoops() {
     console.log(gameContainer.children);
 }
 
+/* store  user time and score once the game has finished */
+
 function storeUserInfo() {
     var time = new Date();
     Users[currentUser].score = Number(numCoins.textContent);
@@ -290,6 +335,9 @@ function storeUserInfo() {
 
 }
 
+/*----------------------------------------------------------------
+update the ranking tables depending on which mode did the user chose
+-------------------------------------------------------------------*/
 function updateRanking() {
     switch (Users[currentUser].mode) {
         case "EASY": {
@@ -331,6 +379,8 @@ function updateRanking() {
     btnBackMain.classList.remove("hidden");
 }
 
+/* back to main once the gaim has finished */
+
 function backToMain() {
 
     inputName.classList.remove("hidden");
@@ -341,19 +391,25 @@ function backToMain() {
     nextStepForm();
 }
 
-
-/* start form completion
-game logic implementation
-*/
-
+/*-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+Only function  directly called, in order to display the 'username' title
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- - */
 nextStepForm();
 
+
+/* detection of W/A/S/D keys */
 
 function detectKey(e) {
     if (e.keyCode == '87' || e.keyCode == '83' || e.keyCode == '65' || e.keyCode == '68') {
         currentKey = e.keyCode;
     }
 }
+
+/*-----------------------------------------------------------
+reseting the currentkey var if the user stops pressing it, in order to then handle
+the game variables using the currentKey instead of the event.target. That is because the default keyboard listener carries
+a inherent delay we want to avoid .
+--------------------------------------------*/
 
 function removeKey(e) {
     if (e.keyCode == currentKey) {
@@ -378,6 +434,10 @@ box.style.marginTop = "250px";
 
 var timeDamaged;
 var powerUpTimer;
+
+/*-----------------------------
+ Main loop game. Div elements moved by using margins and position absolutes
+ ------------------------*/
 
 function keyLoop() {
     let posLeft = box.offsetLeft;
@@ -434,8 +494,36 @@ function keyLoop() {
     }
 }
 
-/* create obstacles */
 
+/*------------------------------------------------------------
+Functions for checking collisions and defining the screen borders
+-------------------------------------------------------------*/
+
+function collision(element1, element2) {
+    let p1 = position(element1);
+    let p2 = position(element2);
+    return (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2]))
+}
+
+function borderTop(element) {
+    return pixToInt(element.style.marginTop) > marginGame;
+}
+
+function borderBottom(element) {
+    return pixToInt(element.style.marginTop) < limitBottom;
+}
+
+function borderLeft(element) {
+    return pixToInt(element.style.marginLeft) > marginGame;
+}
+
+function borderRight(element) {
+    return pixToInt(element.style.marginLeft) < limitRight;
+}
+
+/*------------------------------------------------------------
+functions for defining object "waves"
+-------------------------------------------------------------*/
 function includeObjects() {
 
     firstWave();
@@ -489,10 +577,14 @@ function secondWave() {
 function thirdWave() {
 
     snakeWall(15, arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2])
+    coinLadder();
 
 }
 
 
+/*----------------------
+creating the actual obstacle from the array arrObs, sequencially and  one by one.
+------------------------*/
 
 function pushObstacle() {
 
@@ -512,14 +604,22 @@ function pushObstacle() {
         arrObs = shuffle(arrObs);
     }
     timeObstacle = setTimeout(pushObstacle, arrObs[numObs][0]);
+
 }
 
-// add a given number of coin
+
+/*-------------------------------------
+functions for making easier the addition of obstacles and power ups
+------------------------------------------*/
+
+// add a given number of objects
 function addObject(num, interval, position = "250px", type = "coin") {
     for (let i = 0; i < num; i++) {
         arrObs.push([interval, position, type])
     }
 }
+
+// make a "wall" of objects, with a time interval and where will the hole be
 
 function obstacleWall(hole = true, holeNum, timeInt = 50, send = "normal") {
 
@@ -547,6 +647,8 @@ function obstacleWall(hole = true, holeNum, timeInt = 50, send = "normal") {
     }
 }
 
+// wall made out of two different element types ( boxes, coins, diamonds or powerup)
+
 function mixedWall(type1, type2, tInt = 50) {
     for (let i = 0; i <= numBoxes; i++) {
 
@@ -561,6 +663,7 @@ function mixedWall(type1, type2, tInt = 50) {
     }
 }
 
+//create a snake using the obstacle wall
 function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), holeBoolean = []) {
 
     if (holeBoolean.length == 0) {
@@ -577,9 +680,13 @@ function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), hole
     }
 }
 
+
+// adding some time until the next object
 function wait(tInt) {
     addObject(1, tInt, randPos());
 }
+
+// tunnel of objects by concatenating walls
 
 function tunnel(num, pos = 6) {
     for (i = 0; i < num; i++) {
@@ -587,6 +694,8 @@ function tunnel(num, pos = 6) {
     }
 }
 
+
+// lader of coins
 function coinLadder() {
 
     addObject(5, 300, "200px");
@@ -595,7 +704,9 @@ function coinLadder() {
     addObject(5, 300, "450px;");
 }
 
-//random
+/*-------------------------------------------------
+Functions used for random positioning of the objects in the screen
+---------------------------------------------*/
 
 function randObject(num, tInt, type = "coin") {
 
@@ -612,8 +723,38 @@ function randPos() {
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-// UTILS //
 
+
+/*---------------------------------------
+UTILS
+--------------------------------------*/
+
+
+// from pixels to an integer
+function pixToInt(pixels) {
+    return Number(pixels.slice(0, pixels.length - 2));
+}
+
+// from an integer to pixels
+function intToPix(integer) {
+    return integer + "px";
+}
+
+/*-------------------------------------------------------
+calculate element position assuming its size is 50 by 50
+(some code not generalized in order to account for more speed in the game loop)
+---------------------------------------------------------------*/
+
+function position(element) {
+    return [element.offsetTop + 25, element.offsetLeft, 25]
+}
+
+// element size
+function size(element) {
+    return [pixToInt(element.style.height), pixToInt(element.style.width)]
+}
+
+// populate an array with the same item and length l
 function populateArray(l, item) {
 
     var array = [];
@@ -624,6 +765,7 @@ function populateArray(l, item) {
     return array;
 }
 
+// shuffle an array
 function shuffle(a) {
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
@@ -635,8 +777,23 @@ function shuffle(a) {
     return a;
 }
 
+// convert millis to mins and secs
+
+function minSec(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
+/*---------------------------------
+other functions used in the game loop
+-------------------------*/
+
+
 var power = false;
 var damaged = false;
+
+//function called by a timeout in the game loop when the user gets a power up
 
 function pUpFinished() {
 
@@ -644,57 +801,20 @@ function pUpFinished() {
     power = false;
 }
 
+// function called by a timeout in the gameloop when user gets damaged
 function damagedFinished() {
     damaged = false;
 }
 
-function pixToInt(pixels) {
-    return Number(pixels.slice(0, pixels.length - 2));
-}
 
-function intToPix(integer) {
-    return integer + "px";
-}
-
-function position(element) {
-    //let h2 = pixToInt(element.style.height) / 2
-    //let w2 = pixToInt(element.style.width) / 2
-    // size halfs hard coded
-    return [element.offsetTop + 25, element.offsetLeft, 25]
-}
-
-function size(element) {
-    return [pixToInt(element.style.height), pixToInt(element.style.width)]
-}
-
-function collision(element1, element2) {
-    let p1 = position(element1);
-    let p2 = position(element2);
-    return (Math.abs(p1[0] - p2[0]) <= (p1[2] + p2[2]) && Math.abs(p1[1] - p2[1]) <= (p1[2] + p2[2]))
-}
-
-function borderTop(element) {
-    return pixToInt(element.style.marginTop) > marginGame;
-}
-
-function borderBottom(element) {
-    return pixToInt(element.style.marginTop) < limitBottom;
-}
-
-function borderLeft(element) {
-    return pixToInt(element.style.marginLeft) > marginGame;
-}
-
-function borderRight(element) {
-    return pixToInt(element.style.marginLeft) < limitRight;
-}
-
-// frames  powerUps (coins, lives , diamonds)
+// frames  for the sprites (coins, hearts, diamonds)
 
 var hFrame = 0;
 var cFrame = 0;
 var dFrame = 0;
 
+
+// hearts
 function hFrames() {
     var heartImg = document.querySelectorAll(".heart");
     heartImg.forEach(h => {
@@ -703,6 +823,7 @@ function hFrames() {
     hFrame = (hFrame + 1) % 4;
 }
 
+//coins
 function cFrames() {
     let coinImg = document.querySelectorAll(".coin");
     coinImg.forEach(c => {
@@ -714,19 +835,12 @@ function cFrames() {
 
 }
 
+
+// diamonds
 function dFrames() {
     let diamondImg = document.querySelectorAll(".diamond");
     diamondImg.forEach(d => {
         d.style.backgroundImage = `url('assets/images/diamond${dFrame}.png')`;
     })
     dFrame = (dFrame + 1) % 4
-}
-
-
-// convert millis to mins and secs
-
-function minSec(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
