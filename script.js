@@ -103,6 +103,27 @@ function updateColor(event) {
     Users[currentUser].color = currentColor;
 }
 
+function updateLife() {
+
+    switch (currentMode) {
+        case "EASY":
+            currentLife = 5;
+        case "MEDIUM":
+            currentLife = 3;
+        case "HARD":
+            currentLife = 1;
+    }
+
+    for (i = 0; i < currentLife; i++) {
+
+        var heart = createElement('li');
+        heart.classList.add("heart");
+        heartImg.appendChild(heart);
+    }
+
+
+}
+
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
 
@@ -140,7 +161,6 @@ function validateForm() {
         }
 
         case 3: { // start game
-            //startGame();
             soundStart.play();
             counterBack(cuentaAtras);
             mainSection.classList.add("hidden");
@@ -197,9 +217,9 @@ function startGame() {
 
 function initializeLoops() {
 
-    let intHrames = setInterval(hFrames, 500);
-    let intCframes = setInterval(cFrames, 200);
-    let gameLoop = setInterval(keyLoop, gameInt);
+    intHrames = setInterval(hFrames, 500);
+    intCframes = setInterval(cFrames, 200);
+    gameLoop = setInterval(keyLoop, gameInt);
 
 }
 /* start form completion */
@@ -259,7 +279,7 @@ function keyLoop() {
 
             if (childGame[i].classList.contains("blue-box") && !power) {
                 currentLife--;
-                //document.querySelectorAll(".heart")[0].remove;
+                //document.querySelectorAll(".heart")[0].remove();
 
             } else if (childGame[i].classList.contains("coin")) {
                 numCoins.textContent = (Number(numCoins.textContent) + 1).toString();
