@@ -325,7 +325,7 @@ function includeObjects() {
     randObject(40, 200, "blue-box");
     wait(2000);
     mixedWall("blue-box", "same-box", tInt = 50)
-    snakeTwelve();
+    snakeTwelve(tInt = 150;);
     wait(1000);
 
 
@@ -404,7 +404,7 @@ function mixedWall(type1, type2, tInt = 50) {
 
 }
 
-function snakeWall(num, holes, tInt = 50, holeBoolean) {
+function snakeWall(num, holes, tInt = 150, holeBoolean) {
 
     if (holeBoolean == undefined) {
         holeBoolean = populateArray(num, true);
@@ -419,7 +419,7 @@ function snakeWall(num, holes, tInt = 50, holeBoolean) {
     }
 }
 
-function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean) {
+function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean, tInt = 150;) {
 
     if (holeBoolean == undefined) {
         holeBoolean = populateArray(12, true);
@@ -432,7 +432,6 @@ function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean) 
 function wait(tInt) {
 
     addObject(1, tInt, randPos());
-
 }
 
 function randObject(num, tInt, type = "coin") {
