@@ -255,10 +255,12 @@ function keyLoop() {
     for (let i = 1; i < childGame.length; i++) {
 
         if (collision(box, childGame[i])) {
-            console.log(currentLife);
+
 
             if (childGame[i].classList.contains("blue-box") && !power) {
                 currentLife--;
+                //document.querySelectorAll(".heart")[0].remove;
+
             } else if (childGame[i].classList.contains("coin")) {
                 numCoins.textContent = (Number(numCoins.textContent) + 1).toString();
                 coinSound.play();
@@ -289,28 +291,24 @@ function includeObjects() {
 
     addObject(10, 300, "250px"); // if object not specified, it is a coin
     obstacleWall(hole = false);
-    addObject(1, 5000, "250px");
+    wait(3000);
     addObject(1, 600, "250px", "blue-box")
     obstacleWall(true, 2);
     obstacleWall(false, 2);
-    addObject(1, 2000, "400px");
+    wait(2000);
     obstacleWall(true, 2, timeInt = 100, send = "reversed");
-    addObject(1, 2000, "80px");
+    wait(2000);
     obstacleWall(true, 3, timeInt = 100);
     snakeWall(12, [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], tInt = 150);
     addObject(1, 300, "250px", "diamond");
     randObject(4, 300, "blue-box");
     randObject(100, 50);
-    addObject(1, 500, "250px");
-    addObject(1, 50, "50px", "same-box");
-    addObject(1, 50, "100px", "blue-box");
-    addObject(1, 50, "150px", "same-box");
-    addObject(1, 50, "200px", "blue-box");
-    addObject(1, 50, "250px", "same-box");
-    addObject(1, 50, "250px", "blue-box");
     randObject(40, 200, "blue-box");
-    addObject(1, 2000, "400px");
-    // mixedWall("blue-box", "same-box", tInt = 50)
+    wait(2000);
+    mixedWall("blue-box", "same-box", tInt = 50)
+    snakeTwelve();
+    wait(1000);
+
 
 
 }
@@ -346,7 +344,6 @@ function addObject(num, interval, position, type = "coin") {
 }
 
 
-
 function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "normal") {
 
     if (holeNum == 'undefined') {
@@ -374,7 +371,6 @@ function obstacleWall(hole = true, holeNum = "undefined", timeInt = 50, send = "
 }
 
 function mixedWall(type1, type2, tInt = 50) {
-    obstacleWall
     for (let i = 0; i <= numBoxes; i++) {
 
         if (i % 2 == 0) {
@@ -406,12 +402,19 @@ function snakeWall(num, holes, tInt = 50, holeBoolean) {
 }
 
 
-function snakeTwelve() {
+function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean) {
 
-    var holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1];
+    if (holeBoolean == "undefined") {
+        holeBoolean = populateArray(12, true);
+    }
 
-    snakeWall(12, shuffle(holes))
+    holeBoolean[6] = false;
+    snakeWall(12, shuffle(holes));
+}
 
+function wait(tInt) {
+
+    addObject(1, tInt, randPos());
 
 }
 
