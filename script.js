@@ -1,6 +1,7 @@
 var mainSection = document.querySelector(".main");
 var gameContainer = document.querySelector(".game");
 var gameSection = document.querySelector(".game-wrapper");
+var gameFinshed = document.querySelector(".game-finished");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
@@ -14,7 +15,25 @@ var box = document.getElementById("myId");
 var livesStatus = document.querySelector(".lives");
 var cuentaAtras = document.querySelector("#cuenta-atras");
 var stepForm = -1; // to be set at -1
+
+//timers, useful to have them in vars in order to stop them
 var gameTimer;
+var timeObstacle;
+
+// time intervals
+
+var intHframes;
+var intCframes;
+var gameLoop;
+
+
+// current object number that appears
+var numObs = 0;
+
+// object array that appears on screen
+var arrObs = [];
+
+
 //coins audio
 var coinSound = document.getElementById('sound-coin');
 var soundPup = document.getElementById('sound-powerup');
@@ -201,9 +220,12 @@ function showStep3Form() {
     btnReady.classList.remove("hidden");
 }
 
-let intHrames;
-let intCframes;
-let gameLoop;
+function showRankings() {
+
+    gameSection.classList.add("hidden");
+    gameFinished.classList.remove("hidden");
+}
+
 
 function startGame() {
     gameSection.classList.remove("hidden");
@@ -216,18 +238,43 @@ function startGame() {
 
 function initializeLoops() {
 
-    intHrames = setInterval(hFrames, 500);
+    intHframes = setInterval(hFrames, 500);
     intCframes = setInterval(cFrames, 200);
     gameLoop = setInterval(keyLoop, gameInt);
+    gameTimer = new Date();
+}
+
+function finishLoops() {
+
+    clearInterval(intHframes);
+    clearInterval(intCframes);
+    clearInterval(gameLoop);
+    clearTimeout(timeObstacle);
+    showRankings();
+    var gameItems = gameContainer.children
+    for (i = 0; i < gameItems.length; i++) {
+        gameItems[i].remove();
+    }
+}
+
+function storeUserInfo() {
+
+
+    var time = new Date();
+    Users[currentUser].score = currentScore;
+    Users[currentUser].time = time.getTime(); - gameTimer.getTime();
 
 }
-/* start form completion */
-nextStepForm();
 
-var numObs = 0;
-var arrObs = [];
+/* start form completion
+game logic implementation
+*/
+
+nextStepForm();
 includeObjects();
-/* game logic implementation*/
+
+
+
 
 
 function detectKey(e) {
@@ -260,7 +307,6 @@ function keyLoop() {
     let posLeft = box.offsetLeft;
     let posTop = box.offsetTop;
     let childGame = gameContainer.children;
-
     if (currentKey == '87' && borderTop(box)) {
         box.style.marginTop = (posTop - vBox) + "px";
     } else if (currentKey == '83' && borderBottom(box)) {
@@ -280,9 +326,14 @@ function keyLoop() {
 
                 currentLife--;
                 damaged = true;
-                setTimeout(pUpFinished, 1500);
+                setTimeout(damagedFinished, 1500);
+                document.querySelectorAll(".heart")[0].remove();
 
-                //document.querySelectorAll(".heart")[0].remove();
+                if (currentLife <= 0) {
+
+                    finishLoops();
+                    storeUserInfo();
+                }
 
             } else if (childGame[i].classList.contains("coin")) {
                 numCoins.textContent = (Number(numCoins.textContent) + 1).toString();
@@ -308,23 +359,18 @@ function keyLoop() {
         }
     }
 }
+
+
+
 /* create obstacles */
 
 function includeObjects() {
 
-
     firstWave();
     secondWave();
     thirdWave();
-    //secondWave();
-    //thirdWave();
 
 }
-
-
-
-
-
 
 function firstWave() {
 
@@ -356,7 +402,6 @@ function firstWave() {
 }
 
 function secondWave() {
-
     snakeWall();
     obstacleWall(true, timeInt = 100);
     wait(1000);
@@ -376,6 +421,7 @@ function thirdWave() {
 }
 
 
+
 function pushObstacle() {
 
     let newObs = document.createElement('div');
@@ -390,11 +436,10 @@ function pushObstacle() {
     numObs++;
 
     if (numObs >= arrObs.length) {
-
         numObs = 0;
         arrObs = shuffle(arrObs);
     }
-    setTimeout(pushObstacle, arrObs[numObs][0]);
+    timeObstacle = setTimeout(pushObstacle, arrObs[numObs][0]);
 }
 
 // add a given number of coin
@@ -402,7 +447,6 @@ function addObject(num, interval, position = "250px", type = "coin") {
     for (let i = 0; i < num; i++) {
         arrObs.push([interval, position, type])
     }
-
 }
 
 function obstacleWall(hole = true, holeNum, timeInt = 50, send = "normal") {
@@ -453,7 +497,6 @@ function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), hole
     }
 
     holeBoolean[6] = false;
-
     for (let i = 0; i < num; i++) {
         if (i % 2 == 0) {
             obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "normal");
@@ -463,34 +506,14 @@ function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), hole
     }
 }
 
-
-/*function snakeRand(num = 12, tInt = 150, holeBoolean = undefined) {
-
-    if (holeBoolean == undefined) {
-        holeBoolean = populateArray(num, true);
-    }
-    holeBoolean[6] = false;
-    snakeWall(arrayHoles = defaultHoles);
-
-}
-
-
-*/
-
 function wait(tInt) {
-
     addObject(1, tInt, randPos());
 }
 
 function tunnel(num, pos = 6) {
-
-
     for (i = 0; i < num; i++) {
-
         obstacleWall(holeNum = pos);
-
     }
-
 }
 
 function coinLadder() {
@@ -550,7 +573,7 @@ function pUpFinished() {
     power = false;
 }
 
-function damaged() {
+function damagedFinished() {
     damaged = false;
 }
 
@@ -626,4 +649,13 @@ function dFrames() {
         d.style.backgroundImage = `url('assets/images/diamond${dFrame}.png')`;
     })
     dFrame = (dFrame + 1) % 4
+}
+
+
+// convert millis to mins and secs
+
+function minSec(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
