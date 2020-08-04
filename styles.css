@@ -200,6 +200,13 @@ body {
     height: 60px;
 }
 
+.same-box {
+
+    position: absolute;
+    width: 60px;
+    height: 60px;
+}
+
 .game-wrapper {
 
     position: relative;

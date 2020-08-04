@@ -8,7 +8,7 @@ var buttonsMode = document.querySelector(".buttons-mode");
 var childBtnsMode = buttonsMode.children;
 var carouselColor = document.querySelector(".carousel-color");
 var arrSteps = ["username".split(""), "choose mode".split(""), "choose color".split(""), "Are you ready".split("")];
-var colors = ["rgba(0, 0, 255, 0.5)", "rgba(0,128,0, 0.5)", "rgba(255, 0, 0, 0.5)"]
+var colors = ["rgba(191, 85, 236, 0.8)", "rgba(0,128,0, 0.8)", "rgba(255, 0, 0, 0.8)"]
 var inputName = document.querySelector(".input-name");
 var box = document.getElementById("myId");
 var heartImg = document.querySelectorAll(".heart");
@@ -17,6 +17,7 @@ var stepForm = -1; // to be set at -1
 var gameTimer;
 //coins audio
 var coinSound = document.getElementById('sound-coin');
+var soundPup = document.getElementById('sound-powerup');
 var soundClick = document.getElementById('sound-click');
 var soundStart = document.getElementById('sound-start');
 var numCoins = document.querySelector(".coin-number");
@@ -26,9 +27,11 @@ var currentScore;
 var currentLife = 3;
 var currentKey;
 var currentMode;
+var currentColor = colors[0];
 var Users = {
 
 }
+
 
 colors.forEach(color => {
 
@@ -90,7 +93,7 @@ function updateMode(event) {
 }
 
 function updateColor(event) {
-    let currentColor = event.target.style.backgroundColor;
+    currentColor = event.target.style.backgroundColor;
     Users[currentUser].color = currentColor;
 }
 
@@ -237,18 +240,25 @@ function keyLoop() {
     for (i = 1; i < childGame.length; i++) {
 
         if (collision(box, childGame[i])) {
-            if (childGame[i].classList.contains("blue-box")) {
+            console.log(currentLife);
+
+            if (childGame[i].classList.contains("blue-box") && !power) {
                 currentLife--;
             } else if (childGame[i].classList.contains("coin")) {
-
-                numCoins.textContent = Number(numCoins.textContent) + 1;
-
+                numCoins.textContent = (Number(numCoins.textContent) + 1).toString();
                 coinSound.play();
                 coinSound.currentTime = 0
             } else if (childGame[i].classList.contains("diamond")) {
-                numCoins.textContent = Number(numCoins.textContent) + 5;
+                numCoins.textContent = (Number(numCoins.textContent) + 5).toString();
                 coinSound.play();
                 coinSound.currentTime = 0;
+            } else {
+
+                box.classList.add("power-up");
+                power = true;
+                soundPup.play();
+                soundPup.currentTime = 0;
+                setTimeout(pUpFinished, 6000);
             }
             childGame[i].remove();
         } else if (!borderLeft(childGame[i])) {
@@ -267,6 +277,10 @@ var arrObs = [
     [3000, "250px", "blue-box"],
     [2000, "250px", "blue-box"],
     [50, "310px", "blue-box"],
+    [50, "200px", "same-box"],
+    [500, "300px", "same-box"],
+    [500, "200px", "same-box"],
+    [500, "300px", "same-box"],
     [50, "50px", "coin"],
     [500, "50px", "coin"],
     [500, "50px", "coin"],
@@ -278,21 +292,22 @@ var arrObs = [
 
 ];
 
-
-
 // add a given number of coins
 
 function addCoins(numCoins, interval, position) {
     for (let i = 0; i < numCoins; i++) {}
 }
 
-
 function pushObstacle() {
     let newObs = document.createElement('div');
+    if (arrObs[numObs][2] == "same-box") {
+        newObs.style.backgroundColor = currentColor;
+    }
     newObs.classList.add(arrObs[numObs][2]);
     newObs.style.marginLeft = "1480px";
     newObs.id = "obstacle" + numObs;
     newObs.style.marginTop = arrObs[numObs][1];
+
     gameContainer.appendChild(newObs);
     numObs++;
     if (numObs < arrObs.length) {
@@ -301,6 +316,14 @@ function pushObstacle() {
 }
 
 // UTILS //
+
+var power = false;
+
+function pUpFinished() {
+
+    box.classList.remove(".power-up");
+    power = false;
+}
 
 function pixToInt(pixels) {
     return Number(pixels.slice(0, pixels.length - 2));
