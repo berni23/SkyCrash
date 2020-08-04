@@ -30,6 +30,7 @@ var currentMode;
 var currentColor = colors[0];
 
 
+var defaultHoles = [2, 3, 1, 4, 1, 3, 2, 2, 3, 1, 4, 1];
 var numBoxes = 6; //array wise! ( real number minus 1)
 var bMargin = 15;
 var bSize = 50;
@@ -279,7 +280,8 @@ function keyLoop() {
             if (childGame[i].classList.contains("blue-box") && !power) {
 
                 currentLife--;
-                setTimeout();
+                power = true;
+                setTimeout(pUpFinished, 1500);
 
                 //document.querySelectorAll(".heart")[0].remove();
 
@@ -312,8 +314,8 @@ function keyLoop() {
 function includeObjects() {
 
 
-    snakeTwelve();
-
+    //snakeWall(12, [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], tInt = 150);
+    snakeWall(arrayHoles = shuffle(defaultHoles.slice()));
 }
 
 function firstWave() {
@@ -328,14 +330,14 @@ function firstWave() {
     obstacleWall(true, 2, timeInt = 100, send = "reversed");
     wait(2000);
     obstacleWall(true, 3, timeInt = 100);
-    snakeWall(12, [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], tInt = 150);
+    snakeWall(num = 10, arrayHoles = [2, 3, 1, 1, 3, 2, 2, 3, 1, 1], tInt = 150);
     addObject(1, 300, "250px", "diamond");
     randObject(4, 300, "blue-box");
     randObject(100, 50);
     randObject(40, 200, "blue-box");
     wait(2000);
     mixedWall("blue-box", "same-box", tInt = 50)
-    snakeTwelve(tInt = 150);
+    snakeWall(tInt = 150);
     wait(1000);
     addObject(1, 50, "250px", "diamond");
     addObject(1, 250, "250px", "blue-box");
@@ -348,10 +350,9 @@ function secondWave() {
     wait(1000);
     addObject(1, 300, "same-box");
     randObject(50, 170, "blue-box");
-    tunnel(10);
-
-
-
+    tunnel(10, 3);
+    wait(500);
+    tunnel(10, 4);
 }
 
 
@@ -372,7 +373,6 @@ function pushObstacle() {
 
         numObs = 0;
         arrObs = shuffle(arrObs);
-
     }
     setTimeout(pushObstacle, arrObs[numObs][0]);
 }
@@ -427,40 +427,36 @@ function mixedWall(type1, type2, tInt = 50) {
 
 }
 
-function snakeWall(num, holes, tInt = 150, holeBoolean) {
+function snakeWall(num = 12, arrayHoles = defaultHoles.slice(), tInt = 150, holeBoolean = []) {
 
-    if (holeBoolean == undefined) {
+    if (holeBoolean.length == 0) {
         holeBoolean = populateArray(num, true);
     }
 
+    holeBoolean[6] = false;
+
     for (let i = 0; i < num; i++) {
         if (i % 2 == 0) {
-            obstacleWall(hole = holeBoolean[i], holeNum = holes[i], timeInt = tInt, send = "normal");
+            obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "normal");
         } else {
-            obstacleWall(hole = holeBoolean[i], holeNum = holes[i], timeInt = tInt, send = "reversed");
+            obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "reversed");
         }
     }
 }
 
-function snakeTwelve(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean, tInt = 150) {
+
+/*function snakeRand(num = 12, tInt = 150, holeBoolean = undefined) {
 
     if (holeBoolean == undefined) {
-        holeBoolean = populateArray(12, true);
+        holeBoolean = populateArray(num, true);
     }
-
     holeBoolean[6] = false;
-    snakeWall(12, holes);
+    snakeWall(arrayHoles = defaultHoles);
+
 }
 
-function snakeRand(holes = [2, 3, 1, 5, 1, 3, 2, 2, 3, 1, 4, 1], holeBoolean, tInt = 150) {
 
-    if (holeBoolean == undefined) {
-        holeBoolean = populateArray(12, true);
-    }
-
-    holeBoolean[6] = false;
-    snakeWall(12, shuffle(holes));
-}
+*/
 
 function wait(tInt) {
 
@@ -484,9 +480,6 @@ function coinLadder() {
     addObject(5, 300, "250px");
     addObject(5, 300, "300px");
     addObject(5, 300, "450px;");
-
-
-
 }
 
 //random
@@ -610,9 +603,3 @@ function dFrames() {
     })
     dFrame = (dFrame + 1) % 4
 }
-
-/* let posLeft = document.getElementById('myId').style.offsetLeft;
-let posTop = document.getElementById('myId').style.offsetTop;
-let mLeft = document.getElementById('myId').style.marginLeft;
-let mTop = document.getElementById('myId').style.marginTop;
- */
