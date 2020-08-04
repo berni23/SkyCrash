@@ -225,7 +225,6 @@ function showStep3Form() {
 }
 
 function showRanking() {
-
     gameSection.classList.add("hidden");
     gameFinished.classList.remove("hidden");
 }
@@ -241,7 +240,6 @@ function startGame() {
 }
 
 function initializeLoops() {
-
     intHframes = setInterval(hFrames, 500);
     intCframes = setInterval(cFrames, 200);
     gameLoop = setInterval(keyLoop, gameInt);
@@ -274,9 +272,27 @@ function updateRanking() {
         case "EASY": {
 
             var scoreTitle = document.querySelector(".easy-mode .score-title");
-            var timeTitle = document.querySelector(".easy-mode ul .time-title");
-            var userTitle = document.querySelector(".easy-mode ul .user-title");
+            var timeTitle = document.querySelector(".easy-mode .time-title");
+            var userTitle = document.querySelector(".easy-mode .user-title");
         }
+
+        case "MEDIUM": {
+
+            var scoreTitle = document.querySelector(".medium-mode .score-title");
+            var timeTitle = document.querySelector(".medium-mode .time-title");
+            var userTitle = document.querySelector(".medium-mode .user-title");
+
+        }
+
+        case "HARD": {
+
+            var scoreTitle = document.querySelector(".hard-mode .score-title");
+            var timeTitle = document.querySelector(".hard-mode .time-title");
+            var userTitle = document.querySelector(".hard-mode .user-title");
+
+        }
+
+
     }
 
     var userName = document.createElement("li");
@@ -285,7 +301,6 @@ function updateRanking() {
     finalScore.textContent = Users[currentUser].score;
     var finalTime = document.createElement("li");
     finalTime.textContent = Users[currentUser].time;
-
 
     userTitle.insertAdjacentElement('afterend', userName);
     scoreTitle.insertAdjacentElement('afterend', finalScore);
@@ -380,8 +395,6 @@ function keyLoop() {
         }
     }
 }
-
-
 
 /* create obstacles */
 
