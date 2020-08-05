@@ -143,10 +143,13 @@ when looping in the "keyloop"
 ------------------------------*/
 function updateMode(event) {
 
+
     modeSelected = document.querySelector(".mode-selected")
     modeSelected.classList.remove("mode-selected");
     event.target.classList.add("mode-selected");
     currentMode = event.target.textContent;
+
+
 
 }
 
@@ -366,9 +369,6 @@ function finishLoops() {
     storeUserInfo();
     updateRanking();
     showRanking();
-
-    console.log(gameContainer.children.length);
-    console.log(gameContainer.children);
 }
 
 /* store  user time and score once the game has finished */
@@ -391,6 +391,7 @@ function updateRanking() {
             var scoreTitle = document.querySelector(".easy-mode .score-title");
             var timeTitle = document.querySelector(".easy-mode .time-title");
             var userTitle = document.querySelector(".easy-mode .user-title");
+            break;
         }
 
         case "MEDIUM": {
@@ -398,6 +399,7 @@ function updateRanking() {
             var scoreTitle = document.querySelector(".medium-mode .score-title");
             var timeTitle = document.querySelector(".medium-mode .time-title");
             var userTitle = document.querySelector(".medium-mode .user-title");
+            break;
 
         }
 
@@ -406,6 +408,7 @@ function updateRanking() {
             var scoreTitle = document.querySelector(".hard-mode .score-title");
             var timeTitle = document.querySelector(".hard-mode .time-title");
             var userTitle = document.querySelector(".hard-mode .user-title");
+            break;
 
         }
 
@@ -485,6 +488,9 @@ var powerUpTimer;
 /*-----------------------------
  Main loop game. Div elements moved by using margins and position absolutes
  ------------------------*/
+
+
+
 
 function keyLoop() {
     let posLeft = box.offsetLeft;
