@@ -269,8 +269,10 @@ ul {
 }
 
 
-.ranking {
+/* ranking styles */
 
+
+.ranking {
 
     margin: 30px;
     padding: 20px;
@@ -303,6 +305,23 @@ ul {
     padding: 5px;
     font-family: 'header-font';
 }
+
+/* tutorial section */
+
+.tutorial {
+
+    margin: 20px;
+}
+
+.tutorial p {
+
+    font-family: serif;
+    padding: 10px;
+    font-size: 40px;
+
+}
+
+
 
 
 

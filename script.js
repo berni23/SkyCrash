@@ -2,11 +2,17 @@
 var mainSection = document.querySelector(".main");
 var gameContainer = document.querySelector(".game");
 var gameSection = document.querySelector(".game-wrapper");
+var tutorialSection = document.querySelector(".tutorial");
+
+var childTutorial = tutorialSection.children;
 var gameFinished = document.querySelector(".game-finished");
 var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
 var btnBackMain = document.querySelector("#back-main");
+var btnTutorial = document.querySelector("#button-tutorial");
+var btnTutorialNext = document.querySelector("#tutorial-next");
+var btnTutorialBack = document.querySelector("#tutorial-back");
 var buttonsMode = document.querySelector(".buttons-mode");
 var childBtnsMode = buttonsMode.children;
 var carouselColor = document.querySelector(".carousel-color");
@@ -181,6 +187,9 @@ finishing one match
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
 btnBackMain.addEventListener("click", backToMain);
+btnTutorial.addEventListener("click", showTutorial);
+btnTutorialNext.addEventListener("click", nextTutorialMessage);
+btnTutorialBack.addEventListener("click", tutorialFinished);
 
 
 /* ---------------------
@@ -227,6 +236,7 @@ function validateForm() {
             soundStart.play();
             counterBack(cuentaAtras);
             mainSection.classList.add("hidden");
+            btnTutorial.classList.add("hidden");
             includeObjects();
             break;
         }
@@ -274,6 +284,42 @@ function showRanking() {
     gameSection.classList.add("hidden");
     gameFinished.classList.remove("hidden");
 }
+
+function showTutorial() {
+
+    mainSection.classList.add("hidden");
+    btnTutorial.classList.add("hidden");
+    tutorialSection.classList.remove("hidden");
+}
+
+function tutorialFinished() {
+
+    childTutorial[messageNum].classList.add("hidden");
+    childTutorial[0].classList.remove("hidden");
+    messageNum = 0;
+    tutorialSection.classList.add("hidden");
+    mainSection.classList.remove("hidden");
+    btnTutorial.classList.remove("hidden");
+    btnTutorialNext.classList.remove("hidden");
+    btnTutorialBack.classList.add("hidden");
+}
+
+
+var messageNum = 0;
+
+function nextTutorialMessage() {
+
+    messageNum++;
+    childTutorial[messageNum - 1].classList.add("hidden");
+    childTutorial[messageNum].classList.remove("hidden");
+    if (messageNum == childTutorial.length - 3) {
+
+        btnTutorialNext.classList.add("hidden");
+        btnTutorialBack.classList.remove("hidden");
+
+    }
+}
+
 
 
 /*
@@ -387,6 +433,7 @@ function backToMain() {
     gameFinished.classList.add("hidden");
     btnBackMain.classList.add("hidden");
     mainSection.classList.remove("hidden");
+    btnTutorial.classList.remove("hidden");
     stepForm = -1;
     nextStepForm();
 }
