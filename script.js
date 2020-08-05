@@ -582,9 +582,9 @@ function thirdWave() {
 }
 
 
-/*----------------------
-creating the actual obstacle from the array arrObs, sequencially and  one by one.
-------------------------*/
+/*----------------------------------------------------------------------------
+creating the actual hmtl element from the array arrObs and adding it to the game-container, sequencially and one by one.
+---------------------------------------------------------------------------*/
 
 function pushObstacle() {
 
@@ -807,7 +807,7 @@ function damagedFinished() {
 }
 
 
-// frames  for the sprites (coins, hearts, diamonds)
+// frames for the sprites (coins, hearts, diamonds)
 
 var hFrame = 0;
 var cFrame = 0;

@@ -10,12 +10,6 @@
     src: url("assets/fonts/pdark.woff");
 }
 
-@font-face {
-    font-family: 'beware';
-    src: url("assets/fonts/Beware.woff");
-}
-
-
 body {
     text-align: center;
     padding: 0em;
@@ -311,17 +305,15 @@ ul {
 }
 
 
-/*.game-finished>div{
 
-
-        margin: 6px;
-}
-*/
 
 /* last class, as it acquires higher priority upon the other display options*/
+
 .hidden {
     display: none;
 }
+
+/* animations */
 
 @keyframes glowing {
 
