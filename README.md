@@ -4,9 +4,11 @@
 
 Arcade 2d videogame with collisions,sprites, random wave generator and much more. Everything implemented using only javascript and no libraries!! :grin: :grin:
 <hr>
-<br><br>
+<br>
 
+Execute the <b>index.html</b> file on your browser and start playing!
 
+<br>
 
 <img src="screenshots/game.png" width = "800" />
   
