@@ -64,12 +64,10 @@ var numBoxes = 6; // number of boxes that will be sent in column
 var bMargin = 15; //  margin between those boxes
 var bSize = 50; // box size
 
-
 // object were all users wil be stored
 var Users = {
 
 }
-
 
 //  create a div for every color in the array of colors, in order for the user to  select one of them
 
@@ -129,7 +127,6 @@ function createUser(newUser) {
 
 /* event listener for the easy/ medium / hard options*/
 
-
 for (let i = 0; i < childBtnsMode.length; i++) {
     childBtnsMode[i].addEventListener("click", updateMode);
 }
@@ -143,13 +140,10 @@ when looping in the "keyloop"
 ------------------------------*/
 function updateMode(event) {
 
-
     modeSelected = document.querySelector(".mode-selected")
     modeSelected.classList.remove("mode-selected");
     event.target.classList.add("mode-selected");
     currentMode = event.target.textContent;
-
-
 
 }
 
@@ -162,7 +156,6 @@ function updateLife() {
 
     switch (currentMode) {
         case "EASY":
-
             currentLife = 5;
             break;
         case "MEDIUM":
@@ -179,7 +172,6 @@ function updateLife() {
         heart.classList.add("heart");
         livesStatus.appendChild(heart);
     }
-
 }
 
 /*
@@ -306,8 +298,6 @@ function tutorialFinished() {
     btnTutorialNext.classList.remove("hidden");
     btnTutorialBack.classList.add("hidden");
 }
-
-
 var messageNum = 0;
 
 function nextTutorialMessage() {
@@ -322,9 +312,6 @@ function nextTutorialMessage() {
 
     }
 }
-
-
-
 /*
 ------------------------------------------------------------------
 start game function called in the last step of the validation function
@@ -475,9 +462,9 @@ var marginGame = 5;
 var limitBottom = gHeight - boxSize - marginGame;
 var limitRight = gWidth - boxSize - marginGame;
 var bH2 = boxSize / 2
-var vBox = 4;
-var vOthers = 3;
-var gameInt = 10; // gameInterval
+var vBox = 7;
+var vOthers = 5;
+var gameInt = 16; // gameInterval 
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
