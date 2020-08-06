@@ -477,8 +477,6 @@ var powerUpTimer;
  ------------------------*/
 
 
-
-
 function keyLoop() {
     let posLeft = box.offsetLeft;
     let posTop = box.offsetTop;
