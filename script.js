@@ -464,7 +464,7 @@ var limitRight = gWidth - boxSize - marginGame;
 var bH2 = boxSize / 2
 var vBox = 7;
 var vOthers = 5;
-var gameInt = 16; // gameInterval 
+var gameInt = 16; // gameInterval
 box.style.marginLeft = "750px";
 box.style.marginTop = "250px";
 
@@ -521,6 +521,7 @@ function keyLoop() {
                 power = true;
                 soundPup.play();
                 soundPup.currentTime = 0;
+                clearTimeout(powerUpTimer);
                 powerUpTimer = setTimeout(pUpFinished, 6000);
             }
             childGame[i].remove();
@@ -564,11 +565,17 @@ functions for defining object "waves"
 -------------------------------------------------------------*/
 function includeObjects() {
 
-    firstWave();
-    secondWave();
+    // firstWave();
+    //secondWave();
     thirdWave();
+    //tunnel(10, 5);
+    //snakeWall(5, 100);
+
 
 }
+
+
+
 
 function firstWave() {
 
@@ -614,7 +621,7 @@ function secondWave() {
 
 function thirdWave() {
 
-    snakeWall(15, arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2])
+    snakeWall(15, 140, shuffle(arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2]), holeBoolean = populateArray(15, true))
     coinLadder();
 
 }
@@ -623,6 +630,8 @@ function thirdWave() {
 /*----------------------------------------------------------------------------
 creating the actual hmtl element from the array arrObs and adding it to the game-container, sequencially and one by one.
 ---------------------------------------------------------------------------*/
+
+numObs = 0
 
 function pushObstacle() {
 
@@ -706,9 +715,10 @@ function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), hole
 
     if (holeBoolean.length == 0) {
         holeBoolean = populateArray(num, true);
+        holeBoolean[Math.floor(num / 2)] = false;
     }
 
-    holeBoolean[6] = false;
+
     for (let i = 0; i < num; i++) {
         if (i % 2 == 0) {
             obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "normal");
