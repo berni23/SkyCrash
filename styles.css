@@ -101,7 +101,7 @@ ul {
     font-size: 1em;
 }
 
-.button-start {
+.button-start,.button-try-again {
     padding: 10px;
     transform: translatey(0px);
     animation: float 6s ease-in-out infinite;
@@ -168,6 +168,15 @@ ul {
 #button-ready {
     font-weight: normal;
     font-size: 3em;
+}
+
+.flex{
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 /* game styles*/
@@ -253,6 +262,11 @@ ul {
     -webkit-animation: glowing 3s ease-in-out infinite;
 }
 
+
+.try-again{
+
+    color: var(--color-primary-dark);
+}
 /* on game finished*/
 
 
@@ -262,10 +276,9 @@ ul {
     height: 100%;
     padding-bottom: 20px;
     margin: 5% 0;
-    justify-content: center;
+
     align-items: center;
     text-align: center;
-    display: flex;
 }
 
 

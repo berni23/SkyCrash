@@ -3,6 +3,7 @@ var mainSection = document.querySelector(".main");
 var gameContainer = document.querySelector(".game");
 var gameSection = document.querySelector(".game-wrapper");
 var tutorialSection = document.querySelector(".tutorial");
+var choseUserPanel = document.querySelector(".chose-user-panel")
 
 var childTutorial = tutorialSection.children;
 var gameFinished = document.querySelector(".game-finished");
@@ -10,6 +11,8 @@ var formTitle = document.querySelector(".form-title");
 var btnForm = document.querySelector("#button-form");
 var btnReady = document.querySelector("#button-ready");
 var btnBackMain = document.querySelector("#back-main");
+var btnTryAgain = document.querySelector("#try-again");
+
 var btnTutorial = document.querySelector("#button-tutorial");
 var btnTutorialNext = document.querySelector("#tutorial-next");
 var btnTutorialBack = document.querySelector("#tutorial-back");
@@ -182,6 +185,7 @@ finishing one match
 btnForm.addEventListener("click", validateForm);
 btnReady.addEventListener("click", validateForm);
 btnBackMain.addEventListener("click", backToMain);
+btnTryAgain.addEventListener("click", tryAgain);
 btnTutorial.addEventListener("click", showTutorial);
 btnTutorialNext.addEventListener("click", nextTutorialMessage);
 btnTutorialBack.addEventListener("click", tutorialFinished);
@@ -194,6 +198,11 @@ validation function
 function validateForm() {
     switch (stepForm) {
         case 0: { // username
+
+
+    
+            showStep0Form();
+
             let username = inputName.value;
             inputName.value = "";
 
@@ -254,11 +263,43 @@ function counterBack(element) {
     }
 }
 
+
+
+function tryAgain(){
+
+
+    Users[currentUser].time = 0;
+    Users[currentUser].score = 0;
+
+
+    updateLife();
+    stepForm = 3;
+    validateForm();
+    hideRanking();
+    btnBackMain.classList.add("hidden");
+
+    
+}
+
 /*---------------------------------------------
 functions for hiding / showing sections and elements
 -----------------------------------------------------*/
 
+
+function showStep0Form(){
+
+    stepForm = 0;
+    console.log('showing step 0 form')
+    inputName.classList.remove("hidden");
+
+    console.log('users',Object.keys(Users))
+    if(Object.keys(Users).length) {
+         choseUserPanel.classList.remove("hidden")
+     }
+
+}
 function showStep1Form() {
+
     inputName.classList.add("hidden");
     buttonsMode.classList.remove("hidden");
 }
@@ -278,6 +319,13 @@ function showStep3Form() {
 function showRanking() {
     gameSection.classList.add("hidden");
     gameFinished.classList.remove("hidden");
+    btnTryAgain.classList.remove('hidden');
+}
+
+
+function hideRanking() {
+    gameFinished.classList.add("hidden");
+    btnTryAgain.classList.add('hidden');
 }
 
 function showTutorial() {
@@ -298,6 +346,8 @@ function tutorialFinished() {
     btnTutorialNext.classList.remove("hidden");
     btnTutorialBack.classList.add("hidden");
 }
+
+
 var messageNum = 0;
 
 function nextTutorialMessage() {
@@ -415,6 +465,14 @@ function updateRanking() {
     btnBackMain.classList.remove("hidden");
 }
 
+
+function updateChoseUserPanel(){
+
+
+
+
+}
+
 /* back to main once the gaim has finished */
 
 function backToMain() {
@@ -424,6 +482,7 @@ function backToMain() {
     btnBackMain.classList.add("hidden");
     mainSection.classList.remove("hidden");
     btnTutorial.classList.remove("hidden");
+    tryAgain.classList.add('hidden');
     stepForm = -1;
     nextStepForm();
 }
@@ -432,6 +491,8 @@ function backToMain() {
 Only function  directly called, in order to display the 'username' title
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- - */
 nextStepForm();
+showStep0Form();
+
 
 
 /* detection of W/A/S/D keys */
@@ -565,11 +626,11 @@ functions for defining object "waves"
 -------------------------------------------------------------*/
 function includeObjects() {
 
-    // firstWave();
-    //secondWave();
+    firstWave();
+    secondWave();
     thirdWave();
-    //tunnel(10, 5);
-    //snakeWall(5, 100);
+    tunnel(10, 5);
+    snakeWall(5, 100);
 
 
 }
