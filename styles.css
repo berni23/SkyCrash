@@ -193,7 +193,7 @@ ul {
     position: absolute;
 }
 
-.blue-box {
+.blue-box,.blue-moving-box {
 
     position: absolute;
     background-color: blue;

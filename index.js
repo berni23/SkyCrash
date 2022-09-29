@@ -596,16 +596,18 @@ function keyLoop() {
 
             if(childGame[i].classList.contains('blue-moving-box')){
 
+                childGame[i].style.marginLeft = (childGame[i].offsetLeft - vOthers*2) + "px";
 
-                if (currentKey == '87' && borderTop(box)) {
-                    childGame[i].style.marginTop = (posTop - vBox/2) + "px";
-                } else if (currentKey == '83' && borderBottom(box)) {
-                    childGame[i].style.marginTop = (posTop + vBox/2) + "px";
-                } else if (currentKey == '65' && borderLeft(box)) {
-                    childGame[i].style.marginLeft = (posLeft - vBox/2) + "px";
-                } else if (currentKey == '68' && borderRight(box)) {
-                    childGame[i].style.marginLeft = (posLeft + vBox/2) + "px";
-                }
+
+                // if (currentKey == '87' && borderTop(box)) {
+                //     childGame[i].style.marginTop = (posTop - vBox/2) + "px";
+                // } else if (currentKey == '83' && borderBottom(box)) {
+                //     childGame[i].style.marginTop = (posTop + vBox/2) + "px";
+                // } else if (currentKey == '65' && borderLeft(box)) {
+                //     childGame[i].style.marginLeft = (posLeft - vBox/2) + "px";
+                // } else if (currentKey == '68' && borderRight(box)) {
+                //     childGame[i].style.marginLeft = (posLeft + vBox/2) + "px";
+                // }
 
             }
         }
@@ -645,7 +647,7 @@ functions for defining object "waves"
 function includeObjects() {
 
 
-    // addObject(1,200,"250px",'blue-box')
+      addObject(1,600,"250px",'blue-moving-box')
      firstWave();
      secondWave();
      thirdWave();
@@ -1008,3 +1010,18 @@ function dFrames() {
     
 //     }
 
+
+
+//TODO 
+
+ // rethink waves (easy medium hard)
+
+ // sound when you get hit
+
+ // small animation when you get hit 
+
+ // easy, medium , hard waves
+
+ //deploy to netlify
+
+ // isolate logic 
