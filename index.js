@@ -594,7 +594,7 @@ function keyLoop() {
             childGame[i].style.marginLeft = (childGame[i].offsetLeft - vOthers) + "px";
 
 
-            if(childGame[i].classList.contains('blue-moving-box')){
+            if(childGame[i].classList.contains('fast-blue-box')){
 
                 childGame[i].style.marginLeft = (childGame[i].offsetLeft - vOthers*2) + "px";
 
@@ -647,62 +647,15 @@ functions for defining object "waves"
 function includeObjects() {
 
 
-      addObject(1,600,"250px",'blue-moving-box')
-     firstWave();
-     secondWave();
-     thirdWave();
-     tunnel(10, 5);
-     snakeWall(5, 100);
+    berniWave();
+    //   addObject(1,600,"250px",'blue-moving-box')
+    //  firstWave();
+    //  secondWave();
+    //  thirdWave();
+    //  tunnel(10, 5);
+    //  snakeWall(5, 100);
 }
 
-
-function firstWave() {
-
-    addObject(10, 300, "250px"); // if object not specified, it is a coin
-    obstacleWall(true);
-    wait(3000);
-    addObject(1, 600, "250px", "blue-box")
-    obstacleWall(true, 10);
-    obstacleWall(true, 2);
-    wait(2000);
-    obstacleWall(true, 2, 100, "reversed");
-    wait(2000);
-    obstacleWall(true, 3, 100);
-    snakeWall(10, 150, arrayHoles = [2, 3, 1, 5, 3, 2, 2, 3, 4, 1]);
-    addObject(1, 300, "250px", "diamond");
-    randObject(4, 300, "blue-box");
-    randObject(100, 50);
-    // randObject(1, 20, "same-box");
-    randObject(40, 200, "blue-box");
-    wait(2000);
-    mixedWall("blue-box", tInt = 50);
-    snakeWall(5, 100);
-
-    wait(1000);
-    addObject(1, 50, "250px", "diamond");
-    addObject(1, 250, "250px", "blue-box");
-    coinLadder();
-}
-
-function secondWave() {
-    snakeWall();
-    obstacleWall(true, 100);
-    wait(1000);
-    addObject(1, 300, "250px", "same-box");
-    randObject(50, 170, "blue-box");
-    wait(500);
-    tunnel(10, 3);
-    wait(500);
-    tunnel(10, 5);
-    coinLadder();
-}
-
-function thirdWave() {
-
-    snakeWall(15, 140, shuffle(arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2]), holeBoolean = populateArray(15, true))
-    coinLadder();
-
-}
 
 
 /*----------------------------------------------------------------------------
@@ -733,192 +686,7 @@ function pushObstacle() {
 }
 
 
-/*-------------------------------------
-functions for making easier the addition of obstacles and power ups
-------------------------------------------*/
 
-// add a given number of objects
-function addObject(num, interval, position = "250px", type = "coin") {
-    for (let i = 0; i < num; i++) {
-        arrObs.push([interval, position, type])
-    }
-}
-
-// make a "wall" of objects, with a time interval and where will the hole be
-
-function obstacleWall(hole = true, holeNum=null, timeInt = 50, send = "normal") {
-
-    if (holeNum == null) {
-        holeNum = Math.floor(numBoxes / 2)
-    }
-    for (let i = 0; i <= numBoxes; i++) {
-        if (i == holeNum) {
-            if (!hole) {
-                arrObs.push([timeInt, setPosition(i), "same-box"])
-            } else {
-                arrObs.push([timeInt, setPosition(i), "coin"])
-            }
-        } else {
-            arrObs.push([timeInt, setPosition(i), "blue-box"])
-        }
-    }
-
-    function setPosition(i) {
-        if (send == "reversed") {
-            return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * bMargin)
-        } else {
-            return intToPix(i * bSize + (i + 1) * bMargin);
-        }
-    }
-}
-
-// wall made out of two different element types ( boxes, coins, diamonds or powerup)
-
-function mixedWall(type1, type2, tInt = 50) {
-    for (let i = 0; i <= numBoxes; i++) {
-
-        if (i % 2 == 0) {
-
-            arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type1])
-        } else {
-
-            arrObs.push([tInt, intToPix(i * bSize + (i + 1) * bMargin), type2])
-
-        }
-    }
-}
-
-//create a snake using the obstacle wall
-function snakeWall(num = 12, tInt = 150, arrayHoles = defaultHoles.slice(), holeBoolean = []) {
-
-    if (holeBoolean.length == 0) {
-        holeBoolean = populateArray(num, true);
-        holeBoolean[Math.floor(num / 2)] = false;
-    }
-
-
-    for (let i = 0; i < num; i++) {
-        if (i % 2 == 0) {
-            obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "normal");
-        } else {
-            obstacleWall(hole = holeBoolean[i], holeNum = arrayHoles[i], timeInt = tInt, send = "reversed");
-        }
-    }
-}
-
-
-// adding some time until the next object
-function wait(tInt) {
-    addObject(1, tInt, randPos());
-}
-
-// tunnel of objects by concatenating walls
-
-function tunnel(num, pos = 6) {
-    for (i = 0; i < num; i++) {
-        obstacleWall(holeNum = pos);
-    }
-}
-
-
-// lader of coins
-function coinLadder() {
-
-    addObject(5, 300, "200px");
-    addObject(5, 300, "250px");
-    addObject(5, 300, "300px");
-    addObject(5, 300, "450px;");
-}
-
-/*-------------------------------------------------
-Functions used for random positioning of the objects in the screen
----------------------------------------------*/
-
-function randObject(num, tInt, type = "coin") {
-
-    for (let i = 0; i < num; i++) {
-        arrObs.push([tInt, randPos(), type])
-    }
-}
-
-function randPos() {
-    return intToPix(getRandomInt(430));
-
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
-
-/*---------------------------------------
-UTILS
---------------------------------------*/
-
-
-
-/* detection of W/A/S/D keys */
-
-function detectKey(e) {
-    if (e.keyCode == '87' || e.keyCode == '83' || e.keyCode == '65' || e.keyCode == '68') {
-        currentKey = e.keyCode;
-    }
-}
-
-// from pixels to an integer
-function pixToInt(pixels) {
-    return Number(pixels.slice(0, pixels.length - 2));
-}
-
-// from an integer to pixels
-function intToPix(integer) {
-    return integer + "px";
-}
-
-/*-------------------------------------------------------
-calculate element position assuming its size is 50 by 50
-(some code not generalized in order to account for more speed in the game loop)
----------------------------------------------------------------*/
-
-function position(element) {
-    return [element.offsetTop + 25, element.offsetLeft, 25]
-}
-
-// element size
-function size(element) {
-    return [pixToInt(element.style.height), pixToInt(element.style.width)]
-}
-
-// populate an array with the same item and length l
-function populateArray(l, item) {
-
-    var array = [];
-    for (i = 0; i < l; i++) {
-        array.push(item);
-    }
-
-    return array;
-}
-
-// shuffle an array
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-}
-
-// convert millis to mins and secs
-
-function minSec(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-}
 
 /*---------------------------------
 other functions used in the game loop
