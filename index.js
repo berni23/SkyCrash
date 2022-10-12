@@ -96,8 +96,9 @@ functions for displaying the form titles letter by letter
 -----------------------------------------------*/
 
 function nextStepForm() {
-    displayLetters(arrSteps[stepForm + 1], formTitle);
     stepForm++;
+    displayLetters(arrSteps[stepForm], formTitle);
+    showStepCallbacks[stepForm]();
 }
 
 function displayLetters(charArray, element) {
@@ -195,6 +196,16 @@ btnTutorialNext.addEventListener("click", nextTutorialMessage);
 btnTutorialBack.addEventListener("click", tutorialFinished);
 
 
+function initializeForm(){
+
+    clickButtonIfEnter(btnForm);
+    stepForm = -1;
+    nextStepForm();
+}
+
+var showStepCallbacks = [showStep0Form,showStep1Form,showStep2Form,showStep3Form];
+
+
 /* ---------------------
 validation function
 ---------------------*/
@@ -202,17 +213,11 @@ validation function
 function validateForm() {
     switch (stepForm) {
         case 0: { // username
-
-
-    
-            showStep0Form();
-
             let username = inputName.value;
             inputName.value = "";
 
             if (username != "") {
                 createUser(username);
-                showStep1Form();
                 nextStepForm();
                 soundClick.play();
                 soundClick.currentTime = 0;
@@ -222,7 +227,6 @@ function validateForm() {
         case 1: { //mode
 
             Users[currentUser].mode = currentMode;
-            showStep2Form();
             nextStepForm();
             updateLife();
             soundClick.play();
@@ -233,7 +237,6 @@ function validateForm() {
         case 2: { // choose color
 
             nextStepForm();
-            showStep3Form();
             box.style.backgroundColor = Users[currentUser].color;
             soundClick.play();
             soundClick.currentTime = 0;
@@ -247,7 +250,6 @@ function validateForm() {
             btnTutorial.classList.add("hidden");
             includeObjects();
             addObject(1,200,"250px",'blue-box')
-
             break;
         }
     }
@@ -294,7 +296,8 @@ functions for hiding / showing sections and elements
 
 function showStep0Form(){
 
-    stepForm = 0;
+
+
     console.log('showing step 0 form')
     inputName.classList.remove("hidden");
 
@@ -478,22 +481,29 @@ function updateRanking() {
 
 function backToMain() {
 
+
+    // location.reload();
     inputName.classList.remove("hidden");
     gameFinished.classList.add("hidden");
     btnBackMain.classList.add("hidden");
     mainSection.classList.remove("hidden");
     btnTutorial.classList.remove("hidden");
-    tryAgain.classList.add('hidden');
-    stepForm = -1;
-    nextStepForm();
+    btnTryAgain.classList.add('hidden');
+
+    initializeForm();
+
+    
+
+   
 }
 
 /*-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 Only function  directly called, in order to display the 'username' title
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- - */
-nextStepForm();
-showStep0Form();
+// nextStepForm();
+// showStep0Form(btnForm);
 
+initializeForm();
 
 
 
@@ -598,7 +608,6 @@ function keyLoop() {
 
                 childGame[i].style.marginLeft = (childGame[i].offsetLeft - vOthers*2) + "px";
 
-
                 // if (currentKey == '87' && borderTop(box)) {
                 //     childGame[i].style.marginTop = (posTop - vBox/2) + "px";
                 // } else if (currentKey == '83' && borderBottom(box)) {
@@ -686,8 +695,6 @@ function pushObstacle() {
 }
 
 
-
-
 /*---------------------------------
 other functions used in the game loop
 -------------------------*/
@@ -738,7 +745,6 @@ function cFrames() {
 
 }
 
-
 // diamonds
 function dFrames() {
     let diamondImg = document.querySelectorAll(".diamond");
@@ -747,22 +753,6 @@ function dFrames() {
     })
     dFrame = (dFrame + 1) % 4
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -792,4 +782,7 @@ function dFrames() {
 
  //deploy to netlify
 
- // isolate logic 
+ // isolate logic
+
+
+ // hearts -> restart params on game restarted . 

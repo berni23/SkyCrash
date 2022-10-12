@@ -34,6 +34,21 @@ function detectKey(e) {
     }
 }
 
+
+
+
+function clickButtonIfEnter(button){
+
+    console.log('click')
+    document.onkeyup = function(e){
+        if(e.key=='Enter'){
+            button.click();
+
+        }
+    }
+
+
+}
 // from pixels to an integer
 function pixToInt(pixels) {
     return Number(pixels.slice(0, pixels.length - 2));
