@@ -14,27 +14,38 @@ function addObject(num, interval, position = "250px", type = "coin") {
 
 function obstacleWall(hole = true, holeNum=null, timeInt = 50, send = "normal") {
 
+
     if (holeNum == null) {
         holeNum = Math.floor(numBoxes / 2)
     }
     for (let i = 0; i <= numBoxes; i++) {
         if (i == holeNum) {
             if (!hole) {
-                arrObs.push([timeInt, setPosition(i), "same-box"])
+                arrObs.push([timeInt, setPosition(i,send), "same-box"])
             } else {
-                arrObs.push([timeInt, setPosition(i), "coin"])
+                arrObs.push([timeInt, setPosition(i,send), "coin"])
             }
         } else {
-            arrObs.push([timeInt, setPosition(i), "blue-box"])
+            arrObs.push([timeInt, setPosition(i,send), "blue-box"])
         }
     }
+}
 
-    function setPosition(i) {
-        if (send == "reversed") {
-            return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * bMargin)
-        } else {
-            return intToPix(i * bSize + (i + 1) * bMargin);
-        }
+
+function thickWall(){
+
+    for (let i = 0; i <= numBoxes; i++) {
+      arrObs.push([50, setPosition(i), "blue-box"])
+
+    }
+
+}
+
+function setPosition(i,send='normal') {
+    if (send == "reversed") {
+        return intToPix((numBoxes - i) * bSize + (numBoxes - i + 1) * bMargin)
+    } else {
+        return intToPix(i * bSize + (i + 1) * bMargin);
     }
 }
 
@@ -82,7 +93,7 @@ function wait(tInt) {
 
 function tunnel(num, pos = 6) {
     for (i = 0; i < num; i++) {
-        obstacleWall(holeNum = pos);
+        obstacleWall(true,pos);
     }
 }
 
@@ -93,7 +104,7 @@ function coinLadder() {
     addObject(5, 300, "200px");
     addObject(5, 300, "250px");
     addObject(5, 300, "300px");
-    addObject(5, 300, "450px;");
+    addObject(5, 300, "450px");
 }
 
 
@@ -171,25 +182,44 @@ function secondWave() {
 
 function thirdWave() {
 
-    snakeWall(15, 140, shuffle(arrayHoles = [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2]), holeBoolean = populateArray(15, true))
+    snakeWall(15, 140, shuffle( [0, 5, 1, 5, 1, 4, 1, 4, 1, 5, 0, 5, 1, 4, 2]), holeBoolean = populateArray(15, true))
     coinLadder();
 
 }
 
 
+function superThickWall(){
+
+    thickWall()
+    thickWall()
+    thickWall()
+    thickWall()
+}
+
 function berniWave(){
+    
 
-
-    tunnel(10, 5);
+    thickWall();
+    snakeWall(10, 160, [1, 5, 1, 5, 2, 4, 2, 4, 3,3],[true,true, true,true,true,true, true,true,true,true]);
+    tunnel(10, 3);
     randObject(3,200,'fast-blue-box')
     randObject(5,20,'coin')
-    obstacleWall(true, 10);
+    obstacleWall(true, 4);
     wait(300)
     coinLadder();
     coinLadder();
-    // coinLadder();
-    // coinLadder();
+    duplicateAndShuffle();
+    
+    snakeWall(15, 140, [1,4,5,2,3,1,2,4,5,3], populateArray(10, true))
+    addObject(1, 300, '200px','same-box');
+    addObject(1, 200, '300px','same-box');
 
 
+}
+
+function duplicateAndShuffle(){
+
+    let duplication = shuffle(Object.assign([],arrObs))
+    arrObs = arrObs.concat(duplication)
 
 }
