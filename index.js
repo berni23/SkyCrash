@@ -279,7 +279,6 @@ function tryAgain(){
     Users[currentUser].time = 0;
     Users[currentUser].score = 0;
 
-
     updateLife();
     stepForm = 3;
     validateForm();

@@ -224,11 +224,3 @@ function duplicateAndShuffle(){
 
 }
 
-
-//todo 
-
-
-// 1 use local storage to store user vars
-// 2 remove color chose
-// 3 fix titles appearences
-// 4 refactor  everything into classes
