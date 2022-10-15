@@ -44,7 +44,7 @@ export default class SectionManager {
         this.effectsInBetween();
         this.nextStepForm();
 
-    },
+    }
 
 
     effectsInBetween() {
