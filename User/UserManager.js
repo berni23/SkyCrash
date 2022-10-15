@@ -1,15 +1,14 @@
 import User from "./User.js";
+import ModeFactory from "../modes/ModeFactory.js";
 
 export default class UserManager {
 
     constructor(storageManager) {
         this.storageManager = storageManager;
-        this.currentUser = storeManager.getCurrentUser();
-
+        this.currentUser = this.storageManager.getCurrentUser();
     }
 
     validateUsername(username) {
-
         return username.trim() !== ""
     }
 
@@ -31,6 +30,12 @@ export default class UserManager {
         let users = this.storageManager.get('users')
         users.push(user)
         this.storageManager.set('users', users);
+    }
+
+    setCurrentUserMode(mode) {
+        let factory = new ModeFactory();
+        this.currentUser.mode = factory.getMode(mode);
+
     }
 
 }

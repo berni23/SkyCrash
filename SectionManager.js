@@ -10,47 +10,20 @@ export default class SectionManager {
         this.userManager = new UserManager(storeManager, renderer);
 
     }
-
-
-    effectsInBetween() {
-        this.renderer.soundClick.play();
-        this.renderer.soundClick.currentTime = 0;
-    }
-
-    logicFirstSection() {
-        let username = this.renderer.getUserName();
-        if (!this.userManager.validateUsername(username)) return
-         this.userManager.createUserAndSetAsCurrent(username);
-
-    }
-
     validateForm() {
         switch (this.stepForm) {
             case 0: { // username
-                let username = inputName.value;
-                inputName.value = "";
-
-                if (username != "") {
-                    createUser(username);
-                    nextStepForm();
-                    soundClick.play();
-                    soundClick.currentTime = 0;
-                }
+                this.createUser();
                 break;
             }
             case 1: { //mode
 
-                Users[currentUser].mode = currentMode;
-                nextStepForm();
-                updateLife();
-                soundClick.play();
-                soundClick.currentTime = 0;
-
+                this.chooseMode();
                 break;
             }
             case 2: { // choose color
 
-                nextStepForm();
+
                 box.style.backgroundColor = Users[currentUser].color;
                 soundClick.play();
                 soundClick.currentTime = 0;
@@ -64,10 +37,38 @@ export default class SectionManager {
                 btnTutorial.classList.add("hidden");
                 includeObjects();
                 addObject(1, 200, "250px", 'blue-box')
-                break;
+                return;
+
             }
         }
+        this.effectsInBetween();
+        this.nextStepForm();
 
+    },
+
+
+    effectsInBetween() {
+        this.renderer.soundClick.play();
+        this.renderer.soundClick.currentTime = 0;
+    }
+
+    createUser() {
+        let username = this.renderer.getUserName();
+        if (!this.userManager.validateUsername(username)) return
+        this.userManager.createUserAndSetAsCurrent(username);
+
+    }
+
+    chooseMode() {
+        let input = this.renderer.currentModeInput;
+        this.userManager.setCurrentUserMode(input)
+    }
+
+
+    nextStepForm() {
+        this.stepForm++;
+        this.renderer.displayLetters(stepForm);
+        this.renderer.showStepCallbacks[stepForm]();
     }
 
 

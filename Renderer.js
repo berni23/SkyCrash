@@ -1,9 +1,6 @@
+export default class Renderer {
 
-
-
-export default class Renderer{
-
-    constructor(){
+    constructor() {
 
 
         this.selectSections()
@@ -20,20 +17,18 @@ export default class Renderer{
         this.box = document.getElementById("myId");
         this.livesStatus = document.querySelector(".lives");
         this.countDown = document.querySelector("#cuenta-atras");
-
+        this.showStepCallbacks = [this.showStep0Form,this.showStep1Form,this.showStep2Form,this.showStep3Form]
     }
 
 
-    getUserName(){
-         let username =  this.inputName.value
-         inputName.value = "";
-         return username
+    getUserName() {
+        let username = this.inputName.value
+        this.inputName.value = "";
+        return username
 
     }
 
-
-
-    selectSections(){
+    selectSections() {
 
         this.mainSection = document.querySelector(".main");
         this.gameContainer = document.querySelector(".game");
@@ -45,8 +40,7 @@ export default class Renderer{
 
     }
 
-    selectButtons(){
-
+    selectButtons() {
 
         this.btnForm = document.querySelector("#button-form");
         this.btnReady = document.querySelector("#button-ready");
@@ -56,23 +50,40 @@ export default class Renderer{
         this.btnTutorialNext = document.querySelector("#tutorial-next");
         this.btnTutorialBack = document.querySelector("#tutorial-back");
         this.buttonsMode = document.querySelector(".buttons-mode");
-        this.childBtnsMode = buttonsMode.children;
+        this.childBtnsMode = this.buttonsMode.children;
+        this.currentModeInput = 'easy';
 
-    }
-      selectAudioEffects() {
+        /* event listener for the easy/ medium / hard options*/
 
-            //audio effects
-            this.coinSound = document.getElementById('sound-coin');
-            this.soundPup = document.getElementById('sound-powerup');
-            this.soundClick = document.getElementById('sound-click');
-            this.soundStart = document.getElementById('sound-start');
-            this.numCoins = document.querySelector(".coin-number");
-
-
+        for (let i = 0; i < childBtnsMode.length; i++) {
+            childBtnsMode[i].addEventListener("click", this.updateMode);
+        }
     }
 
+    updateMode(event) {
+        let modeSelected = document.querySelector(".mode-selected")
+        modeSelected.classList.remove("mode-selected");
+        event.target.classList.add("mode-selected");
+        this.currentModeInput = event.target.textContent;
+        return this.currentModeInput;
 
-    initColors(){
+    }
+
+
+    selectAudioEffects() {
+
+        //audio effects
+        this.coinSound = document.getElementById('sound-coin');
+        this.soundPup = document.getElementById('sound-powerup');
+        this.soundClick = document.getElementById('sound-click');
+        this.soundStart = document.getElementById('sound-start');
+        this.numCoins = document.querySelector(".coin-number");
+
+
+    }
+
+
+    initColors() {
 
 
         this.colors.forEach(color => {
@@ -87,8 +98,45 @@ export default class Renderer{
             carouselColor.appendChild(li);
 
         })
+    }
 
+     displayLetters(charArray) {
+        let counter = 0;
+        let displayedString = "";
+        let timer = setInterval(()=>displayLetter(charArray,this.formTitle), 200);
+        function displayLetter(charArray,element) {
+            displayedString += charArray[counter];
+            element.textContent = displayedString;
+            counter++;
+            if (counter === charArray.length) {
+                clearInterval(timer);
+            }
+        }
+    }
 
+     showStep0Form(){
+        this.inputName.classList.remove("hidden");
+        // if(Object.keys(Users).length) {
+        //     choseUserPanel.classList.remove("hidden")
+        // }
+
+    }
+     showStep1Form() {
+
+        this.inputName.classList.add("hidden");
+        this.buttonsMode.classList.remove("hidden");
+    }
+
+     showStep2Form() {
+        this.buttonsMode.classList.add("hidden");
+        this.carouselColor.classList.remove("hidden");
+
+    }
+
+     showStep3Form() {
+       this.carouselColor.classList.add("hidden");
+       this.btnForm.classList.add("hidden");
+       this.btnReady.classList.remove("hidden");
     }
 
 }

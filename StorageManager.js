@@ -1,3 +1,5 @@
+import User from "./User/User.js";
+
 export default class StorageManager {
 
     constructor() {
@@ -14,10 +16,11 @@ export default class StorageManager {
     set(itemName, item) {
 
         this.storage[itemName] = item
-        this.save();
+        this.saveStorage();
     }
-    save() {
-        window.localStorage.setItem('skycrash', this.storage)
+
+    saveStorage() {
+        window.localStorage.setItem('skycrash', JSON.stringify(this.storage))
     }
 
     refreshStorage() {
@@ -25,16 +28,21 @@ export default class StorageManager {
     }
 
     initializeStorage() {
-
         this.storage = {
             users: [],
             currentUser: null
         }
 
-        this.save();
+        this.saveStorage();
     }
 
     getCurrentUser() {
-        this.get('currentUser')
+        let user = this.get('currentUser')
+        if (!user) return null;
+        let userClass = new User();
+        userClass.username = user.username;
+        return userClass;
+
+
     }
 }
