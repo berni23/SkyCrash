@@ -104,9 +104,9 @@ function nextStepForm() {
 function displayLetters(charArray, element) {
     let counter = 0;
     let displayedString = "";
-    let timer = setInterval(displayLetter, 200);
+    let timer = setInterval(()=>displayLetter(charArray,element), 200);
 
-    function displayLetter() {
+    function displayLetter(charArray,element) {
         displayedString += charArray[counter];
         element.textContent = displayedString;
         counter++;

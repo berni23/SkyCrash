@@ -1,0 +1,13 @@
+{
+  "name": "SkyCrash",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/berni23/SkyCrash.git",
+  "author": "bernat-ferrer <bernatferrerm@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "parcel": "^2.7.0"
+  },
+  "type":"module"
+}
