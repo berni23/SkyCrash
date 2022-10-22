@@ -9,6 +9,9 @@ export default class SectionManager {
         this.storeManager = storeManager
         this.userManager = new UserManager(storeManager, renderer);
 
+
+
+
     }
     validateForm() {
         switch (this.stepForm) {
